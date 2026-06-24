@@ -52,9 +52,10 @@ export type CaseStudy = {
   media: string;
   href: string;
   desc: string;
-  /** Optionnel : nom du fichier image dans src/assets/projets/ (ex. "house-of-vibes.jpg").
-   *  Si présent, l'image optimisée remplace le placeholder hachuré. */
-  image?: string;
+  /** Optionnel : noms des fichiers images dans src/assets/projets/, DANS L'ORDRE
+   *  d'affichage (ex. ["house-of-vibes-1.png", "house-of-vibes-2.png"]).
+   *  S'il y en a, la carte devient un carrousel ; sinon le placeholder s'affiche. */
+  images?: string[];
 };
 
 export const cases: CaseStudy[] = [
@@ -67,7 +68,7 @@ export const cases: CaseStudy[] = [
     media: '[ épisode 16:9 ]',
     href: '#',
     desc: 'Un format podcast vidéo récurrent : décor, captation multi-cam et déclinaisons réseaux.',
-    image: 'exemple-house-of-vibes.png',
+    images: ['house-of-vibes-1.png', 'house-of-vibes-2.png', 'house-of-vibes-3.png'],
   },
   {
     title: 'Intermarché',
@@ -78,6 +79,7 @@ export const cases: CaseStudy[] = [
     media: '[ film publicitaire ]',
     href: '#',
     desc: 'Un film publicitaire et ses déclinaisons : concept, tournage, montage, formats réseaux.',
+    images: ['intermarche-1.png', 'intermarche-2.png', 'intermarche-3.png', 'intermarche-4.png', 'intermarche-5.png'],
   },
   {
     title: 'Qu’on se le dise',
@@ -98,6 +100,7 @@ export const cases: CaseStudy[] = [
     media: '[ interview ]',
     href: '#',
     desc: 'Des entretiens patrimoniaux filmés avec soin, son maîtrisé et montage rythmé.',
+    images: ['rem-1.png', 'rem-2.png', 'rem-3.jpeg'],
   },
   {
     title: 'Symington',
@@ -108,6 +111,7 @@ export const cases: CaseStudy[] = [
     media: '[ film de marque ]',
     href: '#',
     desc: 'Un film de marque haut de gamme : direction artistique, tournage et étalonnage.',
+    images: ['symington-1.png', 'symington-2.png', 'symington-3.png', 'symington-4.png'],
   },
 ];
 

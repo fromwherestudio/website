@@ -1,35 +1,68 @@
 ---
 import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
 import type { CaseStudy } from '../data';
 import { resolveProjectImage } from '../lib/images';
 
 interface Props { c: CaseStudy }
 const { c } = Astro.props;
-const img = resolveProjectImage(c.image);
+
+const imgs = (c.images ?? [])
+  .map((name) => resolveProjectImage(name))
+  .filter((m): m is ImageMetadata => Boolean(m));
+const hasGallery = imgs.length > 0;
+const multi = imgs.length > 1;
 ---
 
-<a href={c.href} class="case-card">
+<article class="case-card">
   <div class="case-card__media hatch-soft">
-    <div class="case-card__placeholder">
-      {img ? (
-        <Image src={img} alt={c.title} widths={[400, 800]} sizes="(max-width: 860px) 90vw, 600px" class="case-card__img" />
+    <div class="case-card__frame">
+      {hasGallery ? (
+        <div class="gallery" data-gallery>
+          <div class="gallery__track">
+            {imgs.map((im, i) => (
+              <div class="gallery__slide">
+                <Image
+                  src={im}
+                  alt={`${c.title} — visuel ${i + 1}`}
+                  widths={[400, 800]}
+                  sizes="(max-width: 860px) 90vw, 600px"
+                  class="gallery__img"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+              </div>
+            ))}
+          </div>
+
+          {multi && (
+            <>
+              <button class="gallery__arrow gallery__arrow--prev" type="button" aria-label="Photo précédente">‹</button>
+              <button class="gallery__arrow gallery__arrow--next" type="button" aria-label="Photo suivante">›</button>
+              <div class="gallery__dots">
+                {imgs.map((_, i) => (
+                  <span class="gallery__dot" data-dot={i} aria-hidden="true"></span>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       ) : (
         <span class="case-card__placeholder-label">{c.media}</span>
       )}
     </div>
     <span class="case-card__tab" style={`background:${c.color};color:${c.tabText}`}>{c.cat}</span>
   </div>
-  <div class="case-card__body">
+
+  <a href={c.href} class="case-card__body">
     <div class="case-card__title">{c.title}</div>
     <div class="case-card__tag">{c.tag}</div>
     <p class="case-card__desc">{c.desc}</p>
     <span class="case-card__link">OUVRIR LE DOSSIER →</span>
-  </div>
-</a>
+  </a>
+</article>
 
 <style>
   .case-card {
-    text-decoration: none;
     color: var(--ink);
     display: flex;
     flex-direction: column;
@@ -43,9 +76,12 @@ const img = resolveProjectImage(c.image);
     transform: translate(-2px, -2px);
     box-shadow: 7px 9px 0 rgba(34, 31, 24, .16);
   }
+
   .case-card__media { position: relative; padding: 14px; }
-  .case-card__placeholder {
+  .case-card__frame {
     aspect-ratio: 16 / 9;
+    position: relative;
+    overflow: hidden;
     background-image: repeating-linear-gradient(45deg, rgba(34, 31, 24, .07) 0 8px, transparent 8px 16px);
     background-color: #d8c8a6;
     border: var(--border);
@@ -53,22 +89,17 @@ const img = resolveProjectImage(c.image);
     align-items: center;
     justify-content: center;
   }
+  .case-card__frame:has(.gallery) { background-image: none; }
   .case-card__placeholder-label {
     font-family: var(--font-mono);
     font-size: 11px;
     color: #7c6a44;
   }
-  .case-card__placeholder:has(.case-card__img) { background-image: none; }
-  .case-card__img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-  }
   .case-card__tab {
     position: absolute;
     top: 6px;
     left: 24px;
+    z-index: 3;
     border: var(--border);
     border-radius: 0 0 5px 5px;
     padding: 5px 12px 6px;
@@ -76,7 +107,73 @@ const img = resolveProjectImage(c.image);
     font-size: 10px;
     letter-spacing: .12em;
   }
+
+  /* ===== Carrousel ===== */
+  .gallery { position: absolute; inset: 0; }
+  .gallery__track {
+    display: flex;
+    height: 100%;
+    transition: transform .35s ease;
+    will-change: transform;
+  }
+  .gallery__slide { flex: 0 0 100%; height: 100%; }
+  .gallery__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .gallery__arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--paper);
+    color: var(--ink);
+    border: var(--border);
+    border-radius: 50%;
+    box-shadow: 2px 3px 0 rgba(34, 31, 24, .25);
+    font-family: var(--font-title);
+    font-size: 22px;
+    line-height: 1;
+    padding-bottom: 3px;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity .18s ease, background .15s ease, color .15s ease, transform .12s ease;
+  }
+  .gallery__arrow--prev { left: 10px; }
+  .gallery__arrow--next { right: 10px; }
+  /* visibles au survol de la carte (et au focus clavier) */
+  .case-card:hover .gallery__arrow,
+  .case-card:focus-within .gallery__arrow { opacity: 1; }
+  .gallery__arrow:hover { background: var(--ink); color: var(--paper); }
+  .gallery__arrow:active { transform: translateY(-50%) scale(.92); }
+
+  .gallery__dots {
+    position: absolute;
+    bottom: 9px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    z-index: 2;
+  }
+  .gallery__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--paper);
+    border: 1.5px solid var(--ink);
+    opacity: .55;
+    transition: opacity .15s ease, transform .15s ease;
+  }
+  .gallery__dot[data-active] { opacity: 1; transform: scale(1.25); background: var(--ink); }
+
+  /* ===== Corps (lien) ===== */
   .case-card__body {
+    text-decoration: none;
+    color: var(--ink);
     padding: 20px 22px 24px;
     display: flex;
     flex-direction: column;
@@ -104,4 +201,45 @@ const img = resolveProjectImage(c.image);
     color: var(--kraft-text);
     margin-top: 16px;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery__track { transition: none; }
+  }
 </style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((gallery) => {
+    const track = gallery.querySelector<HTMLElement>('.gallery__track');
+    const slides = gallery.querySelectorAll('.gallery__slide');
+    const dots = gallery.querySelectorAll<HTMLElement>('.gallery__dot');
+    const prev = gallery.querySelector<HTMLButtonElement>('.gallery__arrow--prev');
+    const next = gallery.querySelector<HTMLButtonElement>('.gallery__arrow--next');
+    if (!track || slides.length < 2) return;
+
+    let index = 0;
+    const count = slides.length;
+
+    const render = () => {
+      track.style.transform = `translateX(-${index * 100}%)`;
+      dots.forEach((d, i) => d.toggleAttribute('data-active', i === index));
+    };
+    const go = (i: number) => { index = (i + count) % count; render(); };
+
+    prev?.addEventListener('click', (e) => { e.preventDefault(); go(index - 1); });
+    next?.addEventListener('click', (e) => { e.preventDefault(); go(index + 1); });
+
+    // Swipe tactile / souris
+    let startX = 0;
+    let dragging = false;
+    gallery.addEventListener('pointerdown', (e) => { dragging = true; startX = e.clientX; });
+    gallery.addEventListener('pointerup', (e) => {
+      if (!dragging) return;
+      dragging = false;
+      const dx = e.clientX - startX;
+      if (Math.abs(dx) > 40) go(index + (dx < 0 ? 1 : -1));
+    });
+    gallery.addEventListener('pointercancel', () => { dragging = false; });
+
+    render();
+  });
+</script>
