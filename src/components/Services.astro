@@ -1,6 +1,7 @@
 ---
 import { folders } from '../portfolio';
 import ServiceFolder from './ServiceFolder.astro';
+import DossierDialogs from './DossierDialogs.astro';
 ---
 
 <section id="services" class="container services">
@@ -16,9 +17,11 @@ import ServiceFolder from './ServiceFolder.astro';
   </div>
 
   <div class="folder-grid">
-    {folders.map((f) => <ServiceFolder f={f} href={`/dossiers#${f.id}`} />)}
+    {folders.map((f) => <ServiceFolder f={f} />)}
   </div>
 </section>
+
+<DossierDialogs />
 
 <style>
   .services { padding-top: 96px; }

@@ -17,6 +17,9 @@ export type CaseStudy = {
    *  d'affichage (ex. ["house-of-vibes-1.png", "house-of-vibes-2.png"]).
    *  S'il y en a, la carte devient un carrousel ; sinon le placeholder s'affiche. */
   images?: string[];
+  /** Optionnel : URL d'une émission/épisode Spotify (lien normal ou /embed/).
+   *  Si présent, un lecteur Spotify s'affiche à la place de l'image. Prioritaire. */
+  spotify?: string;
 };
 
 export const cases: CaseStudy[] = [
@@ -49,8 +52,9 @@ export const cases: CaseStudy[] = [
     color: 'var(--jaune)',
     tabText: '#473a12',
     media: '[ émission plateau ]',
-    href: '#',
+    href: 'https://open.spotify.com/show/1yGifjJbcVxnzHTgbV86m8',
     desc: 'Une émission autour du vin et du goût : plateau, réalisation et habillage sur-mesure.',
+    spotify: 'https://open.spotify.com/show/1yGifjJbcVxnzHTgbV86m8',
   },
   {
     title: 'REM Heritage EU',
