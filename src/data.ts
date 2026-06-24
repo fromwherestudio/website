@@ -4,45 +4,6 @@
     petit CMS ou des fichiers Markdown.)
    ================================================================= */
 
-export type Prod = {
-  n: string;
-  title: string;
-  color: string;
-  href: string;
-  desc: string;
-};
-
-export const prods: Prod[] = [
-  {
-    n: '01',
-    title: 'Podcasts',
-    color: 'var(--bleu)',
-    href: '#dossiers',
-    desc: 'Formats vidéo récurrents : décor, captation multi-cam, habillage et extraits courts prêts à diffuser.',
-  },
-  {
-    n: '02',
-    title: 'Réseaux sociaux',
-    color: 'var(--lila)',
-    href: '#dossiers',
-    desc: 'Formats courts pensés pour le scroll : Reels, TikTok, Shorts. Capter l’attention dès la première seconde.',
-  },
-  {
-    n: '03',
-    title: 'Interviews',
-    color: 'var(--vert)',
-    href: '#dossiers',
-    desc: 'Portraits, témoignages et formats corporate filmés avec soin, son net et montage rythmé.',
-  },
-  {
-    n: '04',
-    title: 'Publicités',
-    color: 'var(--corail)',
-    href: '#dossiers',
-    desc: 'Films de marque et spots : direction artistique, tournage et déclinaisons pour tous les écrans.',
-  },
-];
-
 export type CaseStudy = {
   title: string;
   cat: string;

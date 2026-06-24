@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Contact from '../components/Contact.astro';
+import ServiceFolder from '../components/ServiceFolder.astro';
 import { folders } from '../portfolio';
 import { resolveProjectImage } from '../lib/images';
 
@@ -29,21 +30,7 @@ const tilt = ['-3deg', '2.2deg', '-1.4deg', '2.8deg', '-2.2deg', '1.6deg'];
 
       <!-- ===== LES 6 DOSSIERS (fermés) ===== -->
       <div class="folder-grid">
-        {folders.map((f) => (
-          <button class="folder" style={`--c:${f.color}`} data-open={f.id} aria-haspopup="dialog">
-            <span class="folder__tab" style={`color:${f.tabText}`}>DOSSIER {f.n}</span>
-            <span class="folder__sheet folder__sheet--2" aria-hidden="true"></span>
-            <span class="folder__sheet" aria-hidden="true"></span>
-            <span class="folder__front" style={`color:${f.tabText}`}>
-              <span class="folder__cat">{f.cat}</span>
-              <span class="folder__blurb">{f.blurb}</span>
-              <span class="folder__bottom">
-                <span class="folder__count">{f.projects.length} projets</span>
-                <span class="folder__open">OUVRIR →</span>
-              </span>
-            </span>
-          </button>
-        ))}
+        {folders.map((f) => <ServiceFolder f={f} />)}
       </div>
     </div>
   </main>
@@ -126,104 +113,6 @@ const tilt = ['-3deg', '2.2deg', '-1.4deg', '2.8deg', '-2.2deg', '1.6deg'];
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px 28px;
-  }
-
-  .folder {
-    position: relative;
-    padding: 22px 0 0;
-    background: none;
-    border: none;
-    cursor: pointer;
-    text-align: left;
-    font: inherit;
-    display: block;
-    transition: transform .2s ease;
-  }
-  .folder:hover { transform: translateY(-6px); }
-  .folder:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; }
-
-  /* feuilles qui dépassent du dossier */
-  .folder__sheet {
-    position: absolute;
-    left: 16px;
-    right: 16px;
-    top: 12px;
-    height: 40px;
-    background: var(--paper);
-    border: var(--border);
-    border-bottom: none;
-    z-index: 0;
-    transition: transform .2s ease;
-  }
-  .folder__sheet--2 {
-    left: 24px;
-    right: 24px;
-    top: 6px;
-    background: #e7dcc4;
-  }
-  .folder:hover .folder__sheet { transform: translateY(-8px); }
-  .folder:hover .folder__sheet--2 { transform: translateY(-14px); }
-
-  /* onglet du dossier */
-  .folder__tab {
-    position: absolute;
-    top: 0;
-    left: 22px;
-    z-index: 3;
-    background: var(--c);
-    border: var(--border);
-    border-bottom: none;
-    border-radius: 7px 7px 0 0;
-    padding: 5px 16px 7px;
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: .14em;
-  }
-
-  /* couverture du dossier */
-  .folder__front {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    background: var(--c);
-    border: var(--border);
-    box-shadow: var(--shadow);
-    padding: 26px 24px 22px;
-    min-height: 188px;
-  }
-  .folder__cat {
-    font-family: var(--font-title);
-    font-weight: 800;
-    font-size: 27px;
-    letter-spacing: -.02em;
-    line-height: 1;
-  }
-  .folder__blurb {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: .04em;
-    line-height: 1.5;
-    opacity: .8;
-  }
-  .folder__bottom {
-    margin-top: auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 14px;
-    border-top: 1.5px dashed rgba(34, 31, 24, .35);
-  }
-  .folder__count {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    letter-spacing: .08em;
-  }
-  .folder__open {
-    font-family: var(--font-title);
-    font-weight: 700;
-    font-size: 14px;
   }
 
   /* ===== Dossier ouvert (dialog) ===== */
@@ -458,4 +347,15 @@ const tilt = ['-3deg', '2.2deg', '-1.4deg', '2.8deg', '-2.2deg', '1.6deg'];
       if (e.target === dlg) dlg.close();
     });
   });
+
+  // Deep-link : ouvre automatiquement le dossier ciblé par le hash (#podcasts…)
+  // quand on arrive depuis la section « Ce qu'on fait » de la landing.
+  const openFromHash = () => {
+    const id = location.hash.replace('#', '');
+    if (!id) return;
+    const dlg = document.getElementById(`dlg-${id}`) as HTMLDialogElement | null;
+    if (dlg && !dlg.open) dlg.showModal();
+  };
+  openFromHash();
+  window.addEventListener('hashchange', openFromHash);
 </script>

@@ -1,0 +1,52 @@
+---
+import { folders } from '../portfolio';
+import ServiceFolder from './ServiceFolder.astro';
+---
+
+<section id="services" class="container services">
+  <div class="services__head">
+    <div>
+      <div class="kicker">01 — Ce qu'on fait</div>
+      <h2 class="section-title">Six dossiers,<br />une même exigence.</h2>
+    </div>
+    <p class="services__intro">
+      De la captation à l'acquisition : podcasts, réseaux, interviews, publicités —
+      et toute la stratégie & les campagnes. Ouvrez un dossier pour voir comment on travaille.
+    </p>
+  </div>
+
+  <div class="folder-grid">
+    {folders.map((f) => <ServiceFolder f={f} href={`/dossiers#${f.id}`} />)}
+  </div>
+</section>
+
+<style>
+  .services { padding-top: 96px; }
+  .services__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 48px;
+  }
+  .services__intro {
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 360px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .folder-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 28px;
+  }
+
+  @media (max-width: 980px) {
+    .folder-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 560px) {
+    .folder-grid { grid-template-columns: 1fr; }
+  }
+</style>
