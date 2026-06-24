@@ -52,6 +52,9 @@ export type CaseStudy = {
   media: string;
   href: string;
   desc: string;
+  /** Optionnel : nom du fichier image dans src/assets/projets/ (ex. "house-of-vibes.jpg").
+   *  Si présent, l'image optimisée remplace le placeholder hachuré. */
+  image?: string;
 };
 
 export const cases: CaseStudy[] = [
@@ -64,6 +67,7 @@ export const cases: CaseStudy[] = [
     media: '[ épisode 16:9 ]',
     href: '#',
     desc: 'Un format podcast vidéo récurrent : décor, captation multi-cam et déclinaisons réseaux.',
+    image: 'exemple-house-of-vibes.png',
   },
   {
     title: 'Intermarché',

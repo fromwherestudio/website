@@ -1,13 +1,21 @@
 ---
+import { Image } from 'astro:assets';
 import type { CaseStudy } from '../data';
+import { resolveProjectImage } from '../lib/images';
+
 interface Props { c: CaseStudy }
 const { c } = Astro.props;
+const img = resolveProjectImage(c.image);
 ---
 
 <a href={c.href} class="case-card">
   <div class="case-card__media hatch-soft">
     <div class="case-card__placeholder">
-      <span class="case-card__placeholder-label">{c.media}</span>
+      {img ? (
+        <Image src={img} alt={c.title} widths={[400, 800]} sizes="(max-width: 860px) 90vw, 600px" class="case-card__img" />
+      ) : (
+        <span class="case-card__placeholder-label">{c.media}</span>
+      )}
     </div>
     <span class="case-card__tab" style={`background:${c.color};color:${c.tabText}`}>{c.cat}</span>
   </div>
@@ -49,6 +57,13 @@ const { c } = Astro.props;
     font-family: var(--font-mono);
     font-size: 11px;
     color: #7c6a44;
+  }
+  .case-card__placeholder:has(.case-card__img) { background-image: none; }
+  .case-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .case-card__tab {
     position: absolute;

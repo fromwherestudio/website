@@ -11,6 +11,9 @@ export type ShowcaseProject = {
   title: string;
   meta: string;    // type / format
   result: string;  // résultat « tampon » (vendeur)
+  /** Optionnel : nom du fichier image dans src/assets/projets/ (ex. "go-electra.jpg").
+   *  Si présent, l'image optimisée remplace le placeholder hachuré. */
+  image?: string;
 };
 
 export type ServiceFolder = {
