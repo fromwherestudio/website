@@ -1,0 +1,453 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Contact from '../components/Contact.astro';
+import { folders } from '../portfolio';
+
+// rotations décoratives des "tirages" du showcase
+const tilt = ['-3deg', '2.2deg', '-1.4deg', '2.8deg', '-2.2deg', '1.6deg'];
+---
+
+<Layout
+  title="Dossiers — FromWhere Studio · Notre façon de travailler"
+  description="Ouvrez nos dossiers : podcasts, réseaux sociaux, interviews, publicités, stratégies et ads. Notre méthode, service par service, et les projets qu’on en a sortis."
+>
+  <Nav />
+
+  <main class="folders-page">
+    <div class="container">
+      <header class="folders-head">
+        <div class="kicker">Le classeur — comment on travaille</div>
+        <h1 class="folders-title">Ouvrez un dossier.</h1>
+        <p class="folders-lead">
+          Six services, six façons de bosser. Cliquez sur un dossier pour découvrir
+          notre méthode — et les projets qu’on en a sortis.
+        </p>
+      </header>
+
+      <!-- ===== LES 6 DOSSIERS (fermés) ===== -->
+      <div class="folder-grid">
+        {folders.map((f) => (
+          <button class="folder" style={`--c:${f.color}`} data-open={f.id} aria-haspopup="dialog">
+            <span class="folder__tab" style={`color:${f.tabText}`}>DOSSIER {f.n}</span>
+            <span class="folder__sheet folder__sheet--2" aria-hidden="true"></span>
+            <span class="folder__sheet" aria-hidden="true"></span>
+            <span class="folder__front" style={`color:${f.tabText}`}>
+              <span class="folder__cat">{f.cat}</span>
+              <span class="folder__blurb">{f.blurb}</span>
+              <span class="folder__bottom">
+                <span class="folder__count">{f.projects.length} projets</span>
+                <span class="folder__open">OUVRIR →</span>
+              </span>
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </main>
+
+  <!-- ===== DOSSIERS OUVERTS (dialogues) ===== -->
+  {folders.map((f) => (
+    <dialog class="opened" id={`dlg-${f.id}`} style={`--c:${f.color}`} aria-label={`Dossier ${f.cat}`}>
+      <div class="opened__inner">
+        <button class="opened__close" data-close aria-label="Fermer le dossier">×</button>
+
+        <div class="opened__tabrow">
+          <span class="opened__tab" style={`color:${f.tabText}`}>DOSSIER {f.n} — {f.cat.toUpperCase()}</span>
+        </div>
+
+        <div class="opened__body">
+          <div class="opened__left">
+            <h2 class="opened__title">{f.title}</h2>
+            <p class="opened__desc">{f.desc}</p>
+            <ol class="opened__steps">
+              {f.steps.map((s, i) => (
+                <li class="opened__step">
+                  <span class="opened__step-n" style={`background:${f.color};color:${f.tabText}`}>{String(i + 1).padStart(2, '0')}</span>
+                  <span>{s}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div class="opened__right">
+            <div class="opened__showcase-label">Quelques dossiers sortis du studio</div>
+            <div class="opened__prints">
+              {f.projects.map((p, i) => (
+                <article class="print" style={`--tilt:${tilt[i % tilt.length]}`}>
+                  <div class="print__media hatch-soft" style={`--c:${f.color}`}>
+                    <span class="print__media-label">[ {p.title} ]</span>
+                  </div>
+                  <div class="print__body">
+                    <div class="print__title">{p.title}</div>
+                    <div class="print__meta">{p.meta}</div>
+                    <div class="print__stamp" style={`color:${f.tabText};border-color:${f.tabText}`}>{p.result}</div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <a href="/#brief" class="opened__cta">On en parle pour votre projet →</a>
+          </div>
+        </div>
+      </div>
+    </dialog>
+  ))}
+
+  <Contact />
+</Layout>
+
+<style>
+  .folders-page { padding-top: 64px; padding-bottom: 96px; }
+
+  .folders-head { max-width: 640px; margin-bottom: 56px; }
+  .folders-title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: clamp(46px, 6vw, 84px);
+    line-height: .86;
+    letter-spacing: -.04em;
+    margin: 0;
+  }
+  .folders-lead {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--text-muted);
+    margin: 24px 0 0;
+  }
+
+  /* ===== Grille de dossiers fermés ===== */
+  .folder-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px 28px;
+  }
+
+  .folder {
+    position: relative;
+    padding: 22px 0 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    display: block;
+    transition: transform .2s ease;
+  }
+  .folder:hover { transform: translateY(-6px); }
+  .folder:focus-visible { outline: 2px solid var(--ink); outline-offset: 6px; }
+
+  /* feuilles qui dépassent du dossier */
+  .folder__sheet {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    top: 12px;
+    height: 40px;
+    background: var(--paper);
+    border: var(--border);
+    border-bottom: none;
+    z-index: 0;
+    transition: transform .2s ease;
+  }
+  .folder__sheet--2 {
+    left: 24px;
+    right: 24px;
+    top: 6px;
+    background: #e7dcc4;
+  }
+  .folder:hover .folder__sheet { transform: translateY(-8px); }
+  .folder:hover .folder__sheet--2 { transform: translateY(-14px); }
+
+  /* onglet du dossier */
+  .folder__tab {
+    position: absolute;
+    top: 0;
+    left: 22px;
+    z-index: 3;
+    background: var(--c);
+    border: var(--border);
+    border-bottom: none;
+    border-radius: 7px 7px 0 0;
+    padding: 5px 16px 7px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+  }
+
+  /* couverture du dossier */
+  .folder__front {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--c);
+    border: var(--border);
+    box-shadow: var(--shadow);
+    padding: 26px 24px 22px;
+    min-height: 188px;
+  }
+  .folder__cat {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 27px;
+    letter-spacing: -.02em;
+    line-height: 1;
+  }
+  .folder__blurb {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .04em;
+    line-height: 1.5;
+    opacity: .8;
+  }
+  .folder__bottom {
+    margin-top: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1.5px dashed rgba(34, 31, 24, .35);
+  }
+  .folder__count {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .08em;
+  }
+  .folder__open {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  /* ===== Dossier ouvert (dialog) ===== */
+  .opened {
+    width: min(1080px, 92vw);
+    max-height: 90vh;
+    padding: 0;
+    border: var(--border);
+    background: var(--paper);
+    box-shadow: 10px 12px 0 rgba(34, 31, 24, .35);
+    overflow: hidden;
+    color: var(--ink);
+  }
+  .opened::backdrop {
+    background: rgba(34, 31, 24, .55);
+    backdrop-filter: blur(3px);
+  }
+  /* petite animation d'ouverture */
+  .opened[open] { animation: dlg-in .22s ease both; }
+  @keyframes dlg-in {
+    from { opacity: 0; transform: translateY(10px) scale(.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .opened__inner {
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+  .opened__close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    z-index: 5;
+    width: 40px;
+    height: 40px;
+    border: var(--border);
+    background: var(--paper);
+    font-family: var(--font-title);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    border-radius: 50%;
+    transition: background .15s ease, color .15s ease;
+  }
+  .opened__close:hover { background: var(--ink); color: var(--paper); }
+
+  .opened__tabrow {
+    background: var(--c);
+    border-bottom: var(--border);
+    padding: 18px 28px;
+  }
+  .opened__tab {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .18em;
+  }
+
+  .opened__body {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+  }
+  .opened__left {
+    padding: 38px 34px;
+    border-right: var(--border);
+  }
+  .opened__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: clamp(26px, 2.6vw, 36px);
+    line-height: .98;
+    letter-spacing: -.03em;
+    margin: 0 0 18px;
+  }
+  .opened__desc {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0 0 26px;
+  }
+  .opened__steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .opened__step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -.01em;
+  }
+  .opened__step-n {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border: var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .opened__right {
+    padding: 38px 34px;
+    background: var(--carton-light);
+    display: flex;
+    flex-direction: column;
+  }
+  .opened__showcase-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--label-muted);
+    margin-bottom: 22px;
+  }
+  .opened__prints {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .print {
+    flex: 1 1 150px;
+    max-width: 200px;
+    background: var(--paper);
+    border: var(--border);
+    box-shadow: var(--shadow-sm);
+    padding: 9px 9px 0;
+    transform: rotate(var(--tilt));
+    transition: transform .2s ease, box-shadow .2s ease, z-index 0s;
+    position: relative;
+  }
+  .print:hover {
+    transform: rotate(0deg) translateY(-4px);
+    box-shadow: 6px 8px 0 rgba(34, 31, 24, .16);
+    z-index: 2;
+  }
+  .print__media {
+    aspect-ratio: 4 / 3;
+    background-color: var(--c);
+    border: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .print__media-label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: rgba(34, 31, 24, .6);
+    text-align: center;
+    padding: 0 6px;
+  }
+  .print__body { padding: 11px 4px 13px; }
+  .print__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: -.02em;
+    line-height: 1;
+  }
+  .print__meta {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    letter-spacing: .06em;
+    color: var(--label-muted);
+    margin-top: 6px;
+  }
+  .print__stamp {
+    display: inline-block;
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .03em;
+    border: 1.5px dashed;
+    border-radius: 3px;
+    padding: 4px 7px;
+    transform: rotate(-2deg);
+  }
+
+  .opened__cta {
+    margin-top: auto;
+    padding-top: 26px;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    align-self: flex-start;
+  }
+
+  /* ===== Responsive ===== */
+  @media (max-width: 980px) {
+    .folder-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 820px) {
+    .opened__body { grid-template-columns: 1fr; }
+    .opened__left { border-right: none; border-bottom: var(--border); }
+  }
+  @media (max-width: 560px) {
+    .folder-grid { grid-template-columns: 1fr; }
+    .print { max-width: none; flex-basis: 130px; }
+  }
+</style>
+
+<script>
+  const openers = document.querySelectorAll<HTMLButtonElement>('[data-open]');
+  openers.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const id = btn.getAttribute('data-open');
+      const dlg = document.getElementById(`dlg-${id}`) as HTMLDialogElement | null;
+      dlg?.showModal();
+    });
+  });
+
+  document.querySelectorAll<HTMLDialogElement>('dialog.opened').forEach((dlg) => {
+    // bouton fermer
+    dlg.querySelector('[data-close]')?.addEventListener('click', () => dlg.close());
+    // clic sur le fond (backdrop) ferme aussi
+    dlg.addEventListener('click', (e) => {
+      if (e.target === dlg) dlg.close();
+    });
+  });
+</script>

@@ -1,0 +1,138 @@
+/* =================================================================
+   FromWhere Studio — Design tokens & base
+   Style « dossier / carton » : base crème, bordures encre 1.5px,
+   ombres portées dures, composition décalée.
+   ================================================================= */
+
+:root {
+  /* --- Couleurs de surface --- */
+  --paper: #F2EBDD;      /* fond principal */
+  --carton: #E2D4B8;     /* fonds secondaires */
+  --carton-light: #EAE0CD; /* cartes dossier / colonnes */
+  --kraft: #C9A877;      /* accent chaud, carte formulaire */
+  --ink: #221F18;        /* texte, bordures, fonds sombres */
+
+  /* --- Accents pastel --- */
+  --lila: #C7B6E6;
+  --jaune: #EFD27E;
+  --bleu: #A6C6E2;
+  --vert: #AEC9A2;
+  --corail: #E8A492;
+
+  /* --- Textes --- */
+  --text-muted: #46413a;     /* paragraphes */
+  --label-muted: #7c7460;    /* petits libellés mono */
+  --kraft-text: #A8794A;     /* numéros de section */
+
+  /* --- Bordure & ombre dure --- */
+  --border: 1.5px solid var(--ink);
+  --shadow: 5px 6px 0 rgba(34, 31, 24, .1);
+  --shadow-sm: 4px 5px 0 rgba(34, 31, 24, .1);
+  --shadow-lg: 6px 8px 0 rgba(34, 31, 24, .1);
+
+  /* --- Layout --- */
+  --container: 1280px;
+  --pad-x: 40px;
+
+  /* --- Polices --- */
+  --font-title: 'Bricolage Grotesque', sans-serif;
+  --font-body: 'Hanken Grotesk', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; }
+
+img, svg, video { display: block; max-width: 100%; }
+
+/* --- Conteneur centré --- */
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-left: var(--pad-x);
+  padding-right: var(--pad-x);
+}
+
+/* --- Libellés / kickers mono --- */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  color: var(--kraft-text);
+  margin-bottom: 14px;
+}
+
+/* --- Titres de section --- */
+.section-title {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: clamp(38px, 4.6vw, 60px);
+  line-height: .94;
+  letter-spacing: -.03em;
+  margin: 0;
+}
+.section-title em { font-style: italic; font-weight: 600; }
+
+/* --- Boutons --- */
+.btn {
+  font-family: var(--font-title);
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  padding: 15px 26px;
+  font-size: 15px;
+  cursor: pointer;
+  border: var(--border);
+}
+.btn-solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn-outline { background: var(--paper); color: var(--ink); }
+
+/* --- Texture grain (overlay global) --- */
+.grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 90;
+  mix-blend-mode: multiply;
+  opacity: .05;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* --- Motif hachures (chemises / placeholders médias) --- */
+.hatch-soft {
+  background-image: repeating-linear-gradient(45deg, rgba(34, 31, 24, .04) 0 12px, transparent 12px 24px);
+}
+
+/* --- Accessibilité : couper les animations si demandé --- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .marquee-track { animation: none !important; }
+  * { transition: none !important; }
+}
+
+/* =================================================================
+   Marquee (bandeau partenaires)
+   ================================================================= */
+@keyframes fw-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes fw-marquee-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+/* =================================================================
+   Responsive — bascule des grilles en colonne sur mobile
+   ================================================================= */
+@media (max-width: 860px) {
+  :root { --pad-x: 22px; }
+}

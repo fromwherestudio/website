@@ -1,0 +1,47 @@
+---
+import { rowA, rowB } from '../data';
+---
+
+<div class="marquee">
+  <div class="marquee__rows">
+    <div class="marquee__track">
+      {rowA.map((c) => (
+        <span class="marquee__item" style={`color:${c.color}`}>{c.name}</span>
+      ))}
+    </div>
+    <div class="marquee__track marquee__track--rev">
+      {rowB.map((c) => (
+        <span class="marquee__item" style={`color:${c.color}`}>{c.name}</span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style>
+  .marquee {
+    background: var(--ink);
+    padding: 18px 0;
+    overflow: hidden;
+    border-bottom: var(--border);
+  }
+  .marquee__rows { display: flex; flex-direction: column; gap: 8px; }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    gap: 46px;
+    padding: 0 23px;
+    align-items: center;
+    animation: fw-marquee 52s linear infinite;
+  }
+  .marquee__track--rev {
+    margin-left: 90px;
+    animation-name: fw-marquee-rev;
+  }
+  .marquee__item {
+    font-family: var(--font-title);
+    font-weight: 500;
+    font-size: 18px;
+    letter-spacing: -.01em;
+    white-space: nowrap;
+  }
+</style>

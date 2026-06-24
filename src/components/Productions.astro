@@ -1,0 +1,117 @@
+---
+import { prods } from '../data';
+---
+
+<section id="productions" class="container productions">
+  <div class="productions__head">
+    <div>
+      <div class="kicker">01 — Ce qu’on produit</div>
+      <h2 class="section-title">Plusieurs formats,<br />une même exigence.</h2>
+    </div>
+    <p class="productions__intro">
+      Chaque catégorie a sa page détaillée. Cliquez pour ouvrir le dossier complet du savoir-faire.
+    </p>
+  </div>
+
+  <div class="productions__grid">
+    {prods.map((p) => (
+      <a href={p.href} class="prod-card">
+        <div class="prod-card__row">
+          <div class="prod-card__tab" style={`background:${p.color}`}>
+            <span class="prod-card__num">{p.n}</span>
+            <span class="prod-card__title">{p.title}</span>
+          </div>
+          <div class="prod-card__body">
+            <p class="prod-card__desc">{p.desc}</p>
+            <span class="prod-card__link">OUVRIR LE DOSSIER →</span>
+          </div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+
+<style>
+  .productions { padding-top: 96px; }
+  .productions__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-bottom: 44px;
+  }
+  .productions__intro {
+    font-size: 16px;
+    line-height: 1.55;
+    max-width: 340px;
+    color: var(--text-muted);
+    margin: 0;
+  }
+  .productions__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+  .prod-card {
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    border: var(--border);
+    background: var(--paper);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .prod-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 9px 0 rgba(34, 31, 24, .14);
+  }
+  .prod-card__row { display: flex; align-items: stretch; flex: 1; }
+  .prod-card__tab {
+    border-right: var(--border);
+    padding: 24px 18px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 12px;
+    width: 158px;
+    flex: none;
+  }
+  .prod-card__num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink);
+    letter-spacing: .1em;
+  }
+  .prod-card__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 18px;
+    line-height: 1.05;
+    letter-spacing: -.02em;
+    word-break: keep-all;
+    hyphens: none;
+  }
+  .prod-card__body {
+    flex: 1;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  .prod-card__desc { font-size: 15px; line-height: 1.5; margin: 0; color: var(--text-muted); }
+  .prod-card__link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .1em;
+    color: var(--kraft-text);
+  }
+
+  @media (max-width: 860px) {
+    .productions__grid { grid-template-columns: 1fr; }
+    .prod-card__tab { width: 120px; }
+  }
+</style>

@@ -1,0 +1,153 @@
+---
+// Formulaire branché sur Web3Forms (https://web3forms.com) — gratuit, sans backend.
+// ÉTAPE À FAIRE : créer une clé gratuite sur web3forms.com (1 min, avec l'email
+// du studio) puis remplacer la valeur ci-dessous. Les messages arriveront alors
+// directement dans la boîte mail du studio.
+const WEB3FORMS_ACCESS_KEY = 'VOTRE_CLE_WEB3FORMS_ICI';
+---
+
+<form
+  id="brief"
+  class="brief"
+  action="https://api.web3forms.com/submit"
+  method="POST"
+  data-contact-form
+>
+  <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY} />
+  <input type="hidden" name="subject" value="Nouveau brief — site FromWhere Studio" />
+  <input type="hidden" name="from_name" value="Site FromWhere Studio" />
+  <!-- Anti-spam (honeypot) : doit rester vide -->
+  <input type="checkbox" name="botcheck" class="brief__honeypot" tabindex="-1" autocomplete="off" />
+
+  <div class="brief__kicker">Ouvrez votre dossier</div>
+  <div class="brief__title">Un projet en tête ?</div>
+
+  <div class="brief__fields">
+    <input type="text" name="name" placeholder="Votre nom" required class="brief__input" />
+    <input type="email" name="email" placeholder="Email" required class="brief__input" />
+    <input type="text" name="project_type" placeholder="Type de projet (podcast, pub…)" class="brief__input" />
+    <textarea name="message" placeholder="Dites-nous tout en quelques mots…" rows="3" required class="brief__input brief__textarea"></textarea>
+  </div>
+
+  <button type="submit" class="brief__submit">Envoyer le brief →</button>
+  <p class="brief__status" role="status" aria-live="polite" hidden></p>
+</form>
+
+<style>
+  .brief {
+    border: var(--border);
+    background: var(--kraft);
+    color: var(--ink);
+    box-shadow: 5px 6px 0 rgba(0, 0, 0, .25);
+    padding: 28px 26px;
+    display: flex;
+    flex-direction: column;
+    scroll-margin-top: 90px; /* sous la nav sticky */
+  }
+  /* petit flash quand on arrive dessus via le lien "On en parle…" */
+  .brief:target { animation: brief-flash 1.4s ease; }
+  @keyframes brief-flash {
+    0%, 100% { box-shadow: 5px 6px 0 rgba(0, 0, 0, .25); }
+    25% { box-shadow: 0 0 0 4px var(--ink), 5px 6px 0 rgba(0, 0, 0, .25); }
+  }
+  .brief__honeypot { display: none; }
+  .brief__kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .16em;
+    color: #5a4a2e;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .brief__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 26px;
+    letter-spacing: -.02em;
+    line-height: 1;
+    margin-bottom: 18px;
+  }
+  .brief__fields { display: flex; flex-direction: column; gap: 11px; flex: 1; }
+  .brief__input {
+    font-family: var(--font-body);
+    font-size: 14px;
+    background: var(--paper);
+    border: var(--border);
+    color: var(--ink);
+    padding: 12px 14px;
+    outline: none;
+    width: 100%;
+  }
+  .brief__input:focus { box-shadow: 0 0 0 2px rgba(34, 31, 24, .25); }
+  .brief__textarea { resize: none; flex: 1; min-height: 84px; }
+  .brief__submit {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 15px;
+    background: var(--ink);
+    color: var(--paper);
+    border: var(--border);
+    padding: 13px;
+    margin-top: 13px;
+    cursor: pointer;
+    transition: opacity .15s ease;
+  }
+  .brief__submit:hover { opacity: .9; }
+  .brief__submit:disabled { opacity: .55; cursor: progress; }
+  .brief__status {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    line-height: 1.5;
+    margin: 12px 0 0;
+  }
+  .brief__status[data-state='success'] { color: #1f3d1a; }
+  .brief__status[data-state='error'] { color: #7a1f12; }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
+  if (form) {
+    const btn = form.querySelector<HTMLButtonElement>('.brief__submit')!;
+    const status = form.querySelector<HTMLParagraphElement>('.brief__status')!;
+    const key = (form.querySelector('input[name="access_key"]') as HTMLInputElement).value;
+
+    const show = (msg: string, state: 'success' | 'error') => {
+      status.textContent = msg;
+      status.dataset.state = state;
+      status.hidden = false;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      if (!key || key.startsWith('VOTRE_CLE')) {
+        show('Formulaire non configuré : ajoutez votre clé Web3Forms pour activer l’envoi.', 'error');
+        return;
+      }
+
+      const original = btn.textContent;
+      btn.disabled = true;
+      btn.textContent = 'Envoi…';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { Accept: 'application/json' },
+          body: new FormData(form),
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          form.reset();
+          show('Merci ! Votre brief est bien parti. On vous répond vite.', 'success');
+        } else {
+          show('Oups, l’envoi a échoué. Réessayez ou écrivez-nous directement par email.', 'error');
+        }
+      } catch {
+        show('Connexion impossible. Réessayez ou écrivez-nous directement par email.', 'error');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = original;
+      }
+    });
+  }
+</script>

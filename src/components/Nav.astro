@@ -1,0 +1,151 @@
+---
+const links = [
+  { href: '/#productions', label: 'Productions' },
+  { href: '/#capacites', label: 'Capacités' },
+  { href: '/dossiers', label: 'Dossiers' },
+  { href: '/#faq', label: 'FAQ' },
+];
+---
+
+<nav class="nav">
+  <div class="container nav__inner">
+    <a href="/" class="nav__brand">
+      <span class="nav__logo">FW</span>
+      <span class="nav__name">fromwhere <span class="nav__studio">STUDIO</span></span>
+    </a>
+
+    <button class="nav__burger" aria-label="Ouvrir le menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <div class="nav__links">
+      {links.map((l) => <a href={l.href} class="nav__link">{l.label}</a>)}
+      <a href="/#contact" class="nav__cta">Nous écrire →</a>
+    </div>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    background: rgba(242, 235, 221, .86);
+    backdrop-filter: blur(8px);
+    border-bottom: var(--border);
+  }
+  .nav__inner {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .nav__brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    text-decoration: none;
+  }
+  .nav__logo {
+    background: var(--jaune);
+    border: var(--border);
+    padding: 6px 9px 7px;
+    border-radius: 4px 4px 0 0;
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 1;
+  }
+  .nav__name {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -.01em;
+  }
+  .nav__studio {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .28em;
+    color: var(--label-muted);
+  }
+  .nav__links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+  }
+  .nav__link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color .15s ease;
+  }
+  .nav__link:hover { color: var(--ink); }
+  .nav__cta {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 18px;
+    text-decoration: none;
+  }
+
+  /* Burger caché en desktop */
+  .nav__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+  }
+  .nav__burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--ink);
+    transition: transform .2s ease, opacity .2s ease;
+  }
+
+  @media (max-width: 860px) {
+    .nav__burger { display: flex; }
+    .nav__links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      background: var(--paper);
+      border-bottom: var(--border);
+      padding: 8px 22px 18px;
+      display: none;
+    }
+    .nav__links.is-open { display: flex; }
+    .nav__link { padding: 14px 0; border-bottom: 1px solid rgba(34, 31, 24, .12); }
+    .nav__cta { margin-top: 14px; text-align: center; }
+  }
+</style>
+
+<script>
+  const burger = document.querySelector<HTMLButtonElement>('.nav__burger');
+  const links = document.querySelector<HTMLElement>('.nav__links');
+  burger?.addEventListener('click', () => {
+    const open = links?.classList.toggle('is-open');
+    burger.setAttribute('aria-expanded', String(!!open));
+  });
+  // Referme le menu après clic sur un lien (mobile)
+  links?.querySelectorAll('a').forEach((a) =>
+    a.addEventListener('click', () => {
+      links.classList.remove('is-open');
+      burger?.setAttribute('aria-expanded', 'false');
+    })
+  );
+</script>

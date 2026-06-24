@@ -1,0 +1,64 @@
+---
+import { cases } from '../data';
+import CaseCard from './CaseCard.astro';
+import ContactForm from './ContactForm.astro';
+
+const casesTop = cases.slice(0, 4);
+const caseLast = cases[4];
+const portfolioUrl = 'https://fromwherestudio.myportfolio.com/navigation';
+---
+
+<section id="dossiers" class="dossiers">
+  <div class="container dossiers__inner">
+    <div class="kicker" style="color:var(--kraft)">03 — Dossiers clients</div>
+    <h2 class="section-title dossiers__title">Ce qu’on a déjà sorti<br />du studio.</h2>
+
+    <div class="dossiers__grid">
+      {casesTop.map((c) => <CaseCard c={c} />)}
+      <ContactForm />
+      <CaseCard c={caseLast} />
+    </div>
+
+    <div class="dossiers__more">
+      <a href={portfolioUrl} target="_blank" rel="noopener" class="dossiers__more-link">
+        Voir tout le portfolio ↗
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dossiers {
+    background: var(--ink);
+    color: var(--paper);
+    margin-top: 104px;
+    border-top: var(--border);
+    border-bottom: var(--border);
+  }
+  .dossiers__inner { padding-top: 96px; padding-bottom: 96px; }
+  .dossiers__title { margin: 0 0 44px; max-width: 720px; color: var(--paper); }
+  .dossiers__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    align-items: stretch;
+  }
+  .dossiers__more { text-align: center; margin-top: 40px; }
+  .dossiers__more-link {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 16px;
+    background: transparent;
+    color: var(--paper);
+    padding: 15px 28px;
+    border: 1.5px solid #6a6456;
+    text-decoration: none;
+    display: inline-block;
+    transition: background .15s ease, color .15s ease;
+  }
+  .dossiers__more-link:hover { background: var(--paper); color: var(--ink); }
+
+  @media (max-width: 860px) {
+    .dossiers__grid { grid-template-columns: 1fr; }
+  }
+</style>

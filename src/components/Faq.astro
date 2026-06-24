@@ -1,0 +1,123 @@
+---
+import { faqs } from '../data';
+---
+
+<section id="faq" class="container faq">
+  <div class="faq__grid">
+    <div>
+      <div class="kicker">04 — Questions fréquentes</div>
+      <h2 class="section-title faq__title">Avant<br />de nous<br />écrire.</h2>
+    </div>
+
+    <div class="faq__list">
+      {faqs.map((f, i) => (
+        <div class="faq__item">
+          <button
+            class="faq__q"
+            aria-expanded={i === 0 ? 'true' : 'false'}
+            aria-controls={`faq-a-${i}`}
+            id={`faq-q-${i}`}
+          >
+            <span class="faq__n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="faq__question">{f.q}</span>
+            <span class="faq__sign" aria-hidden="true">{i === 0 ? '–' : '+'}</span>
+          </button>
+          <div
+            class="faq__a"
+            id={`faq-a-${i}`}
+            role="region"
+            aria-labelledby={`faq-q-${i}`}
+            hidden={i !== 0}
+          >
+            <p class="faq__answer">{f.a}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq { padding-top: 104px; }
+  .faq__grid {
+    display: grid;
+    grid-template-columns: .7fr 1.3fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .faq__title {
+    font-size: clamp(34px, 4vw, 52px);
+  }
+  .faq__list { border-top: var(--border); }
+  .faq__item { border-bottom: var(--border); }
+  .faq__q {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 4px;
+    cursor: pointer;
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    color: inherit;
+    font: inherit;
+  }
+  .faq__n {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--kraft-text);
+  }
+  .faq__question {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -.01em;
+    flex: 1;
+  }
+  .faq__sign {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1;
+  }
+  .faq__answer {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0 4px 24px 46px;
+    color: var(--text-muted);
+    max-width: 640px;
+  }
+
+  @media (max-width: 860px) {
+    .faq__grid { grid-template-columns: 1fr; gap: 28px; }
+  }
+</style>
+
+<script>
+  const items = document.querySelectorAll<HTMLElement>('.faq__item');
+  items.forEach((item) => {
+    const btn = item.querySelector<HTMLButtonElement>('.faq__q')!;
+    const panel = item.querySelector<HTMLElement>('.faq__a')!;
+    const sign = item.querySelector<HTMLElement>('.faq__sign')!;
+
+    btn.addEventListener('click', () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      // Une seule question ouverte à la fois
+      items.forEach((other) => {
+        const b = other.querySelector<HTMLButtonElement>('.faq__q')!;
+        const p = other.querySelector<HTMLElement>('.faq__a')!;
+        const s = other.querySelector<HTMLElement>('.faq__sign')!;
+        b.setAttribute('aria-expanded', 'false');
+        p.hidden = true;
+        s.textContent = '+';
+      });
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        panel.hidden = false;
+        sign.textContent = '–';
+      }
+    });
+  });
+</script>

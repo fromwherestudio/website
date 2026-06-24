@@ -1,0 +1,152 @@
+---
+const email = 'hello@fromwherestudio.be';
+const phoneDisplay = '+32 (0)4 XX XX XX XX';
+const phoneHref = 'tel:+3200000000';
+const socials = [
+  { label: 'INSTAGRAM', href: '#' },
+  { label: 'LINKEDIN', href: '#' },
+  { label: 'YOUTUBE', href: '#' },
+];
+const year = new Date().getFullYear();
+---
+
+<section id="contact" class="contact">
+  <div class="container contact__inner">
+    <div>
+      <div class="kicker" style="color:var(--kraft)">05 — Parlons-en</div>
+      <h2 class="contact__title">
+        Une idée<br />en tête ?<br /><em>Sortons-la.</em>
+      </h2>
+      <p class="contact__lead">
+        Pas de formulaire à remplir. On préfère parler. Écrivez, appelez, ou passez au studio à Bruxelles.
+      </p>
+    </div>
+
+    <div class="contact__links">
+      <a href={`mailto:${email}`} class="contact__big" style="background:var(--jaune)">
+        <span>
+          <span class="contact__big-label">EMAIL</span>
+          <span class="contact__big-value">{email}</span>
+        </span>
+        <span class="contact__arrow">→</span>
+      </a>
+      <a href={phoneHref} class="contact__big" style="background:var(--lila)">
+        <span>
+          <span class="contact__big-label">TÉLÉPHONE</span>
+          <span class="contact__big-value">{phoneDisplay}</span>
+        </span>
+        <span class="contact__arrow">→</span>
+      </a>
+      <div class="contact__socials">
+        {socials.map((s) => <a href={s.href} class="contact__social">{s.label}</a>)}
+      </div>
+    </div>
+  </div>
+
+  <div class="contact__footer">
+    <div class="container contact__footer-inner">
+      <span class="contact__copy">© {year} FROMWHERE STUDIO — BRUXELLES</span>
+      <span class="contact__copy">
+        Site conçu par <a href="#" class="contact__credit">CovalTech ↗</a> · Mentions légales
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    margin-top: 104px;
+    background: var(--ink);
+    color: var(--paper);
+    border-top: var(--border);
+  }
+  .contact__inner {
+    padding-top: 80px;
+    padding-bottom: 80px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .contact__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: clamp(42px, 5.4vw, 76px);
+    line-height: .9;
+    letter-spacing: -.03em;
+    margin: 0;
+  }
+  .contact__title em { font-style: italic; font-weight: 600; color: var(--jaune); }
+  .contact__lead {
+    font-size: 17px;
+    line-height: 1.55;
+    max-width: 420px;
+    margin: 26px 0 0;
+    color: #cfc6b2;
+  }
+  .contact__links { display: flex; flex-direction: column; gap: 16px; }
+  .contact__big {
+    text-decoration: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--ink);
+    border: 1.5px solid var(--paper);
+    padding: 22px 24px;
+    transition: transform .15s ease;
+  }
+  .contact__big:hover { transform: translateX(4px); }
+  .contact__big-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .12em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .contact__big-value {
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 20px;
+  }
+  .contact__arrow { font-size: 22px; }
+  .contact__socials { display: flex; gap: 12px; }
+  .contact__social {
+    flex: 1;
+    text-decoration: none;
+    text-align: center;
+    background: transparent;
+    color: var(--paper);
+    border: 1.5px solid #6a6456;
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .12em;
+    transition: background .15s ease, color .15s ease;
+  }
+  .contact__social:hover { background: var(--paper); color: var(--ink); }
+
+  .contact__footer { border-top: 1px solid #3a362c; }
+  .contact__footer-inner {
+    padding-top: 24px;
+    padding-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  .contact__copy {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #8a8270;
+    letter-spacing: .06em;
+  }
+  .contact__credit { color: var(--kraft); text-decoration: none; }
+
+  @media (max-width: 860px) {
+    .contact__inner { grid-template-columns: 1fr; gap: 36px; }
+  }
+  @media (max-width: 520px) {
+    .contact__socials { flex-direction: column; }
+  }
+</style>

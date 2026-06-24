@@ -1,0 +1,114 @@
+---
+const chips = ['Meta Ads', 'TikTok Ads', 'Instagram', 'YouTube'];
+const items = [
+  { n: '01', title: 'Stratégie & calendrier', desc: 'Ligne éditoriale, formats, rythme de publication adaptés à chaque plateforme.' },
+  { n: '02', title: 'Gestion des campagnes Ads', desc: 'Création, ciblage et optimisation de vos publicités Meta & TikTok, budget maîtrisé.' },
+  { n: '03', title: 'Suivi des performances', desc: 'Reporting clair, lecture des résultats et ajustements continus.' },
+];
+---
+
+<section class="container strategie">
+  <div class="strategie__card">
+    <div class="strategie__left">
+      <div class="kicker" style="color:#564a72">Au-delà du tournage</div>
+      <h2 class="strategie__title">
+        On gère aussi vos<br />campagnes <em>Meta & TikTok.</em>
+      </h2>
+      <p class="strategie__lead">
+        Filmer ne suffit pas. On pilote la diffusion et l’acquisition : stratégie de contenu,
+        mise en ligne, gestion des publicités et reporting — pour que chaque vidéo trouve,
+        et convertisse, son audience.
+      </p>
+      <div class="strategie__chips">
+        {chips.map((c) => <span class="strategie__chip">{c}</span>)}
+      </div>
+    </div>
+
+    <div class="strategie__right">
+      {items.map((it, i) => (
+        <div class="strategie__item" data-last={i === items.length - 1}>
+          <span class="strategie__item-n">{it.n}</span>
+          <div>
+            <div class="strategie__item-title">{it.title}</div>
+            <div class="strategie__item-desc">{it.desc}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .strategie { padding-top: 88px; }
+  .strategie__card {
+    border: var(--border);
+    background: var(--lila);
+    box-shadow: var(--shadow-lg);
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    overflow: hidden;
+  }
+  .strategie__left { padding: 48px; border-right: var(--border); }
+  .strategie__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: clamp(32px, 3.6vw, 46px);
+    line-height: .98;
+    letter-spacing: -.03em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .strategie__title em { font-style: italic; font-weight: 600; }
+  .strategie__lead {
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 440px;
+    margin: 22px 0 26px;
+    color: #2c2440;
+  }
+  .strategie__chips { display: flex; gap: 10px; flex-wrap: wrap; }
+  .strategie__chip {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: .06em;
+    background: var(--paper);
+    border: var(--border);
+    color: var(--ink);
+    padding: 7px 13px;
+  }
+
+  .strategie__right { padding: 48px; display: flex; flex-direction: column; background: var(--carton-light); }
+  .strategie__item {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: 22px 0;
+    border-bottom: 1px dashed #b3a079;
+  }
+  .strategie__item:first-child { padding-top: 0; }
+  .strategie__item[data-last='true'] { padding-bottom: 0; border-bottom: none; }
+  .strategie__item-n {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--kraft-text);
+    margin-top: 4px;
+  }
+  .strategie__item-title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -.01em;
+  }
+  .strategie__item-desc {
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: #5a5448;
+    margin-top: 5px;
+  }
+
+  @media (max-width: 860px) {
+    .strategie__card { grid-template-columns: 1fr; }
+    .strategie__left { border-right: none; border-bottom: var(--border); padding: 32px; }
+    .strategie__right { padding: 32px; }
+  }
+</style>

@@ -1,0 +1,147 @@
+---
+const stats = [
+  { value: '120+', label: 'projets livrés', bg: 'var(--jaune)', color: '#473a12', border: true },
+  { value: '8 ans', label: 'de studio', bg: 'var(--vert)', color: '#26361d', border: true },
+  { value: '4', label: 'expertises', bg: 'var(--corail)', color: '#4a2419', border: false },
+];
+---
+
+<header id="top" class="hero">
+  <div class="hero__left">
+    <div class="hero__badge">EST.<br />BXL</div>
+    <div class="hero__kicker">FromWhere Studio — Production audiovisuelle · Bruxelles</div>
+    <h1 class="hero__title">FILMER<br />CE QUI<br /><em>COMPTE.</em></h1>
+    <p class="hero__lead">
+      Podcasts, émissions, interviews, publicités. De l’idée à la diffusion, on produit
+      des contenus qui se regardent jusqu’au bout.
+    </p>
+    <div class="hero__actions">
+      <a href="#productions" class="btn btn-solid">Voir nos productions →</a>
+      <a href="#contact" class="btn btn-outline">Démarrer un projet</a>
+    </div>
+  </div>
+
+  <div class="hero__right">
+    <div class="hero__reel">
+      <div class="hero__play" aria-hidden="true">▶</div>
+      <span class="hero__reel-label">[ SHOWREEL 2026 — vidéo plein cadre ]</span>
+    </div>
+    <div class="hero__stats">
+      {stats.map((s) => (
+        <div class="hero__stat" style={`background:${s.bg};color:${s.color};${s.border ? 'border-right:var(--border);' : ''}`}>
+          <div class="hero__stat-value">{s.value}</div>
+          <div class="hero__stat-label">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</header>
+
+<style>
+  .hero {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 86vh;
+    border-bottom: var(--border);
+  }
+  .hero__left {
+    background: var(--lila);
+    padding: 72px 5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-right: var(--border);
+    position: relative;
+  }
+  .hero__badge {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    width: 62px;
+    height: 62px;
+    border-radius: 50%;
+    border: var(--border);
+    background: var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-title);
+    font-weight: 700;
+    font-size: 10px;
+    text-align: center;
+    line-height: 1.05;
+    transform: rotate(-12deg);
+  }
+  .hero__kicker {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: .18em;
+    color: #564a72;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+  .hero__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: clamp(54px, 7vw, 96px);
+    line-height: .84;
+    letter-spacing: -.04em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .hero__title em { font-style: italic; font-weight: 600; }
+  .hero__lead {
+    font-size: 18px;
+    line-height: 1.55;
+    max-width: 400px;
+    margin: 30px 0 34px;
+    color: #2c2440;
+  }
+  .hero__actions { display: flex; gap: 13px; flex-wrap: wrap; }
+
+  .hero__right {
+    background: var(--ink);
+    display: grid;
+    grid-template-rows: 1fr auto;
+  }
+  .hero__reel {
+    background-image: repeating-linear-gradient(45deg, rgba(242, 235, 221, .07) 0 11px, transparent 11px 22px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1.5px solid #4a463c;
+    position: relative;
+    min-height: 360px;
+  }
+  .hero__play {
+    width: 74px;
+    height: 74px;
+    border-radius: 50%;
+    border: 1.5px solid var(--paper);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--paper);
+    font-size: 24px;
+    padding-left: 4px;
+  }
+  .hero__reel-label {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: #bdb29a;
+    letter-spacing: .08em;
+  }
+  .hero__stats { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+  .hero__stat { padding: 22px; font-family: var(--font-title); }
+  .hero__stat-value { font-weight: 800; font-size: 30px; line-height: 1; }
+  .hero__stat-label { font-size: 13px; font-weight: 500; margin-top: 4px; }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; min-height: 0; }
+    .hero__left { padding: 56px 22px; border-right: none; border-bottom: var(--border); }
+    .hero__reel { min-height: 260px; }
+  }
+</style>

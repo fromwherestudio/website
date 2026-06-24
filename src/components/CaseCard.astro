@@ -1,0 +1,92 @@
+---
+import type { CaseStudy } from '../data';
+interface Props { c: CaseStudy }
+const { c } = Astro.props;
+---
+
+<a href={c.href} class="case-card">
+  <div class="case-card__media hatch-soft">
+    <div class="case-card__placeholder">
+      <span class="case-card__placeholder-label">{c.media}</span>
+    </div>
+    <span class="case-card__tab" style={`background:${c.color};color:${c.tabText}`}>{c.cat}</span>
+  </div>
+  <div class="case-card__body">
+    <div class="case-card__title">{c.title}</div>
+    <div class="case-card__tag">{c.tag}</div>
+    <p class="case-card__desc">{c.desc}</p>
+    <span class="case-card__link">OUVRIR LE DOSSIER →</span>
+  </div>
+</a>
+
+<style>
+  .case-card {
+    text-decoration: none;
+    color: var(--ink);
+    display: flex;
+    flex-direction: column;
+    border: var(--border);
+    background: var(--carton-light);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform .18s ease, box-shadow .18s ease;
+  }
+  .case-card:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 7px 9px 0 rgba(34, 31, 24, .16);
+  }
+  .case-card__media { position: relative; padding: 14px; }
+  .case-card__placeholder {
+    aspect-ratio: 16 / 9;
+    background-image: repeating-linear-gradient(45deg, rgba(34, 31, 24, .07) 0 8px, transparent 8px 16px);
+    background-color: #d8c8a6;
+    border: var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .case-card__placeholder-label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: #7c6a44;
+  }
+  .case-card__tab {
+    position: absolute;
+    top: 6px;
+    left: 24px;
+    border: var(--border);
+    border-radius: 0 0 5px 5px;
+    padding: 5px 12px 6px;
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: .12em;
+  }
+  .case-card__body {
+    padding: 20px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+  }
+  .case-card__title {
+    font-family: var(--font-title);
+    font-weight: 800;
+    font-size: 25px;
+    letter-spacing: -.02em;
+    line-height: 1;
+  }
+  .case-card__tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--label-muted);
+    margin-top: 7px;
+    letter-spacing: .04em;
+  }
+  .case-card__desc { font-size: 14.5px; line-height: 1.5; margin: 13px 0 0; color: var(--text-muted); }
+  .case-card__link {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: .1em;
+    color: var(--kraft-text);
+    margin-top: 16px;
+  }
+</style>
