@@ -1,8 +1,8 @@
 ---
 const stats = [
-  { value: '120+', label: 'projets livrés', bg: 'var(--jaune)', color: '#473a12', border: true },
-  { value: '8 ans', label: 'de studio', bg: 'var(--vert)', color: '#26361d', border: true },
-  { value: '4', label: 'expertises', bg: 'var(--corail)', color: '#4a2419', border: false },
+  { value: '57', label: 'projets livrés', bg: 'var(--jaune)', color: '#473a12', border: true },
+  { value: '4 ans', label: 'de studio', bg: 'var(--vert)', color: '#26361d', border: true },
+  { value: '10M+', label: 'de vues', bg: 'var(--corail)', color: '#4a2419', border: false },
 ];
 ---
 
@@ -143,5 +143,8 @@ const stats = [
     .hero { grid-template-columns: 1fr; min-height: 0; }
     .hero__left { padding: 56px 22px; border-right: none; border-bottom: var(--border); }
     .hero__reel { min-height: 260px; }
+    /* évite que le badge chevauche le kicker */
+    .hero__badge { top: 16px; right: 16px; width: 52px; height: 52px; }
+    .hero__kicker { padding-right: 72px; }
   }
 </style>

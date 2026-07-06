@@ -20,6 +20,10 @@ export type CaseStudy = {
   /** Optionnel : URL d'une émission/épisode Spotify (lien normal ou /embed/).
    *  Si présent, un lecteur Spotify s'affiche à la place de l'image. Prioritaire. */
   spotify?: string;
+  /** Optionnel : id du dossier-service lié (podcasts, reseaux, interviews,
+   *  publicites, strategies, ads). Le clic ouvre ce dossier sur place
+   *  (fallback : navigation vers /dossiers#id). */
+  dossier?: string;
 };
 
 export const cases: CaseStudy[] = [
@@ -30,7 +34,8 @@ export const cases: CaseStudy[] = [
     color: 'var(--bleu)',
     tabText: '#1f3548',
     media: '[ épisode 16:9 ]',
-    href: '#',
+    href: '/dossiers#podcasts',
+    dossier: 'podcasts',
     desc: 'Un format podcast vidéo récurrent : décor, captation multi-cam et déclinaisons réseaux.',
     images: ['house-of-vibes-1.png', 'house-of-vibes-2.png', 'house-of-vibes-3.png'],
   },
@@ -41,7 +46,8 @@ export const cases: CaseStudy[] = [
     color: 'var(--corail)',
     tabText: '#4a2419',
     media: '[ film publicitaire ]',
-    href: '#',
+    href: '/dossiers#publicites',
+    dossier: 'publicites',
     desc: 'Un film publicitaire et ses déclinaisons : concept, tournage, montage, formats réseaux.',
     images: ['intermarche-1.png', 'intermarche-2.png', 'intermarche-3.png', 'intermarche-4.png', 'intermarche-5.png'],
   },
@@ -63,7 +69,8 @@ export const cases: CaseStudy[] = [
     color: 'var(--vert)',
     tabText: '#26361d',
     media: '[ interview ]',
-    href: '#',
+    href: '/dossiers#interviews',
+    dossier: 'interviews',
     desc: 'Des entretiens patrimoniaux filmés avec soin, son maîtrisé et montage rythmé.',
     images: ['rem-1.png', 'rem-2.png', 'rem-3.jpeg'],
   },
@@ -74,7 +81,8 @@ export const cases: CaseStudy[] = [
     color: 'var(--lila)',
     tabText: '#2c2440',
     media: '[ film de marque ]',
-    href: '#',
+    href: '/dossiers#publicites',
+    dossier: 'publicites',
     desc: 'Un film de marque haut de gamme : direction artistique, tournage et étalonnage.',
     images: ['symington-1.png', 'symington-2.png', 'symington-3.png', 'symington-4.png'],
   },

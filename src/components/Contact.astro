@@ -1,11 +1,9 @@
 ---
-const email = 'hello@fromwherestudio.be';
-const phoneDisplay = '+32 (0)4 XX XX XX XX';
-const phoneHref = 'tel:+3200000000';
+const email = 'fromwhereproduction@gmail.com';
+const instagram = 'https://www.instagram.com/fromwhere.studio/';
 const socials = [
-  { label: 'INSTAGRAM', href: '#' },
-  { label: 'LINKEDIN', href: '#' },
-  { label: 'YOUTUBE', href: '#' },
+  { label: 'INSTAGRAM', href: instagram },
+  { label: 'LINKEDIN', href: 'https://www.linkedin.com/company/fromwhere/' },
 ];
 const year = new Date().getFullYear();
 ---
@@ -18,7 +16,7 @@ const year = new Date().getFullYear();
         Une idée<br />en tête ?<br /><em>Sortons-la.</em>
       </h2>
       <p class="contact__lead">
-        Pas de formulaire à remplir. On préfère parler. Écrivez, appelez, ou passez au studio à Bruxelles.
+        Un mail, un brief en trois lignes, ou un café au studio à Bruxelles — comme vous préférez.
       </p>
     </div>
 
@@ -30,15 +28,15 @@ const year = new Date().getFullYear();
         </span>
         <span class="contact__arrow">→</span>
       </a>
-      <a href={phoneHref} class="contact__big" style="background:var(--lila)">
+      <a href="/#brief" class="contact__big" style="background:var(--lila)">
         <span>
-          <span class="contact__big-label">TÉLÉPHONE</span>
-          <span class="contact__big-value">{phoneDisplay}</span>
+          <span class="contact__big-label">BRIEF EXPRESS</span>
+          <span class="contact__big-value">Un projet en tête ?</span>
         </span>
         <span class="contact__arrow">→</span>
       </a>
       <div class="contact__socials">
-        {socials.map((s) => <a href={s.href} class="contact__social">{s.label}</a>)}
+        {socials.map((s) => <a href={s.href} target="_blank" rel="noopener" class="contact__social">{s.label}</a>)}
       </div>
     </div>
   </div>
@@ -47,7 +45,7 @@ const year = new Date().getFullYear();
     <div class="container contact__footer-inner">
       <span class="contact__copy">© {year} FROMWHERE STUDIO — BRUXELLES</span>
       <span class="contact__copy">
-        Site conçu par <a href="#" class="contact__credit">CovalTech ↗</a> · Mentions légales
+        Site conçu par <span class="contact__credit">CovalTech</span>
       </span>
     </div>
   </div>
@@ -107,7 +105,9 @@ const year = new Date().getFullYear();
     font-family: var(--font-title);
     font-weight: 700;
     font-size: 20px;
+    overflow-wrap: anywhere; /* les emails longs cassent au lieu de déborder */
   }
+  .contact__big > span:first-child { min-width: 0; }
   .contact__arrow { font-size: 22px; }
   .contact__socials { display: flex; gap: 12px; }
   .contact__social {
@@ -145,6 +145,7 @@ const year = new Date().getFullYear();
 
   @media (max-width: 860px) {
     .contact__inner { grid-template-columns: 1fr; gap: 36px; }
+    .contact__big-value { font-size: 17px; }
   }
   @media (max-width: 520px) {
     .contact__socials { flex-direction: column; }

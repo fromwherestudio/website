@@ -76,6 +76,7 @@ const external = c.href.startsWith('http');
     href={c.href}
     class="case-card__body"
     {...(external ? { target: '_blank', rel: 'noopener' } : {})}
+    {...(c.dossier ? { 'data-open': c.dossier } : {})}
   >
     <div class="case-card__title">{c.title}</div>
     <div class="case-card__tag">{c.tag}</div>
@@ -138,7 +139,7 @@ const external = c.href.startsWith('http');
     border-radius: 0 0 5px 5px;
     padding: 5px 12px 6px;
     font-family: var(--font-mono);
-    font-size: 10px;
+    font-size: 11px;
     letter-spacing: .12em;
   }
 

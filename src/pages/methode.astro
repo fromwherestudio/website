@@ -90,12 +90,9 @@ const laws = [
         jusqu’à la dernière vue.
       </p>
       <div class="equation">
-        <span class="equation__term">Intention</span>
-        <span class="equation__op">×</span>
-        <span class="equation__term">Exécution</span>
-        <span class="equation__op">×</span>
-        <span class="equation__term">Diffusion</span>
-        <span class="equation__op">=</span>
+        <span class="equation__pair"><span class="equation__term">Intention</span><span class="equation__op">×</span></span>
+        <span class="equation__pair"><span class="equation__term">Exécution</span><span class="equation__op">×</span></span>
+        <span class="equation__pair"><span class="equation__term">Diffusion</span><span class="equation__op">=</span></span>
         <span class="equation__term equation__term--res">Attention</span>
       </div>
     </section>
@@ -262,6 +259,12 @@ const laws = [
     align-items: center;
     gap: 12px;
     margin-top: 36px;
+  }
+  .equation__pair {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    white-space: nowrap;
   }
   .equation__term {
     font-family: var(--font-mono);
