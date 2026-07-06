@@ -10,6 +10,8 @@ const {
   title = 'FromWhere Studio — Production audiovisuelle · Bruxelles',
   description = 'Studio de production audiovisuelle à Bruxelles : podcasts, émissions, interviews, publicités, et stratégie d’acquisition Meta & TikTok. De l’idée à la diffusion.',
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!DOCTYPE html>
@@ -20,12 +22,16 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
 
     <!-- Open Graph / réseaux sociaux -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="FromWhere Studio" />
     <meta property="og:locale" content="fr_BE" />
+    <meta name="twitter:card" content="summary_large_image" />
 
     <!-- Polices Google -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
