@@ -41,9 +41,9 @@ export const folders: ServiceFolder[] = [
     desc: 'On transforme une conversation en rendez-vous qu’on attend. Décor signature, captation multi-caméra, son maîtrisé et un montage qui garde le rythme — épisode après épisode. Vous ne repartez pas avec un fichier : vous repartez avec un format qui fidélise, et tous les extraits qui le font tourner.',
     steps: ['Concept & décor sur-mesure', 'Captation multi-caméra + son pro', 'Montage long format + extraits verticaux'],
     projects: [
-      { title: 'Sous le Capot', meta: 'SÉRIE · 24 ÉPISODES', result: '+180% d’abonnés en 6 mois' },
-      { title: 'Tables Rondes BXL', meta: 'TALK MENSUEL · PLATEAU', result: '3 saisons · audience ×4' },
-      { title: 'Le Brief', meta: 'PODCAST CORPORATE', result: 'Format hebdo internalisé' },
+      { title: 'Sous le Capot', meta: 'SÉRIE · 24 ÉPISODES', result: '+180% d’abonnés en 6 mois', image: 'podcasts-p1.png' },
+      { title: 'Tables Rondes BXL', meta: 'TALK MENSUEL · PLATEAU', result: '3 saisons · audience ×4', image: 'podcasts-p2.png' },
+      { title: 'Le Brief', meta: 'PODCAST CORPORATE', result: 'Format hebdo internalisé', image: 'podcasts-p3.jpg' },
     ],
   },
   {
@@ -57,9 +57,9 @@ export const folders: ServiceFolder[] = [
     desc: 'Des formats courts calibrés plateforme par plateforme, une accroche dès la première seconde, et un volume qui nourrit l’algorithme sans vous épuiser. Un seul jour de tournage peut alimenter un mois de contenu. Du contenu pensé pour être vu — pas juste posté.',
     steps: ['Ligne éditoriale + formats', '1 jour de tournage = 1 mois de contenu', 'Montage vertical + déclinaisons'],
     projects: [
-      { title: 'Go Electra', meta: 'REELS · SÉRIE VERTICALE', result: '2,3M de vues cumulées' },
-      { title: 'Vollenbak BXL', meta: 'TIKTOK · FOOD', result: '1 vidéo > 800K vues' },
-      { title: 'Updated', meta: 'SHORTS · TECH', result: 'Cadence ×3 · CPM ÷2' },
+      { title: 'Go Electra', meta: 'REELS · SÉRIE VERTICALE', result: '2,3M de vues cumulées', image: 'reseaux-p1.jpg' },
+      { title: 'Vollenbak BXL', meta: 'TIKTOK · FOOD', result: '1 vidéo > 800K vues', image: 'reseaux-p2.png' },
+      { title: 'Updated', meta: 'SHORTS · TECH', result: 'Cadence ×3 · CPM ÷2', image: 'reseaux-p3.jpg' },
     ],
   },
   {
@@ -73,9 +73,9 @@ export const folders: ServiceFolder[] = [
     desc: 'Conférences, lancements, festivals, soirées : on couvre votre événement en multi-caméra et on en tire un aftermovie qui donne envie d’y être. Captation live, interviews à chaud, best-of réseaux — livrés vite, tant que l’émotion est encore fraîche.',
     steps: ['Repérage & plan de captation', 'Captation multi-caméra le jour J', 'Aftermovie + capsules réseaux'],
     projects: [
-      { title: 'Tech Summit BXL', meta: 'CONFÉRENCE · AFTERMOVIE', result: '1 aftermovie · 40 capsules' },
-      { title: 'Solvay Awards', meta: 'SOIRÉE · CAPTATION LIVE', result: 'Live + best-of le lendemain' },
-      { title: 'Go Electra — Launch', meta: 'LANCEMENT PRODUIT', result: 'Teaser vu 500K fois' },
+      { title: 'Tech Summit BXL', meta: 'CONFÉRENCE · AFTERMOVIE', result: '1 aftermovie · 40 capsules', image: 'event-p1.png' },
+      { title: 'Solvay Awards', meta: 'SOIRÉE · CAPTATION LIVE', result: 'Live + best-of le lendemain', image: 'event-p2.jpg' },
+      { title: 'Go Electra — Launch', meta: 'LANCEMENT PRODUIT', result: 'Teaser vu 500K fois', image: 'event-p3.jpg' },
     ],
   },
   {
@@ -89,9 +89,9 @@ export const folders: ServiceFolder[] = [
     desc: 'Direction artistique forte, tournage cinéma et déclinaisons pour chaque écran — du 16:9 au 9:16. On conçoit le film de marque ET tous ses cut-downs, pour que le message vive partout où votre audience se trouve. Une pub qu’on n’a pas envie de skipper.',
     steps: ['Concept créatif + DA', 'Tournage (réal, lumière, déco)', 'Étalonnage + déclinaisons multi-formats'],
     projects: [
-      { title: 'Intermarché', meta: 'FILM DE MARQUE', result: 'Spot national + 8 cut-downs' },
-      { title: 'Symington', meta: 'FILM INTERNATIONAL', result: 'Diffusé dans 5 pays' },
-      { title: 'Entier', meta: 'CAMPAGNE PRODUIT', result: 'ROAS ×4 au lancement' },
+      { title: 'Intermarché', meta: 'FILM DE MARQUE', result: 'Spot national + 8 cut-downs', image: 'publicites-p1.png' },
+      { title: 'Symington', meta: 'FILM INTERNATIONAL', result: 'Diffusé dans 5 pays', image: 'publicites-p2.png' },
+      { title: 'Entier', meta: 'CAMPAGNE PRODUIT', result: 'ROAS ×4 au lancement', image: 'publicites-p3.png' },
     ],
   },
   {
