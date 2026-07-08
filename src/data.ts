@@ -20,7 +20,7 @@ export type CaseStudy = {
   /** Optionnel : URL d'une émission/épisode Spotify (lien normal ou /embed/).
    *  Si présent, un lecteur Spotify s'affiche à la place de l'image. Prioritaire. */
   spotify?: string;
-  /** Optionnel : id du dossier-service lié (podcasts, reseaux, interviews,
+  /** Optionnel : id du dossier-service lié (podcasts, reseaux, evenementiel,
    *  publicites, strategies, ads). Le clic ouvre ce dossier sur place
    *  (fallback : navigation vers /dossiers#id). */
   dossier?: string;
@@ -69,8 +69,7 @@ export const cases: CaseStudy[] = [
     color: 'var(--vert)',
     tabText: '#26361d',
     media: '[ interview ]',
-    href: '/dossiers#interviews',
-    dossier: 'interviews',
+    href: 'https://fromwherestudio.myportfolio.com/navigation',
     desc: 'Des entretiens patrimoniaux filmés avec soin, son maîtrisé et montage rythmé.',
     images: ['rem-1.png', 'rem-2.png', 'rem-3.jpeg'],
   },

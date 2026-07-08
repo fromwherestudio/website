@@ -81,7 +81,7 @@ const external = c.href.startsWith('http');
     <div class="case-card__title">{c.title}</div>
     <div class="case-card__tag">{c.tag}</div>
     <p class="case-card__desc">{c.desc}</p>
-    <span class="case-card__link">{external ? 'ÉCOUTER SUR SPOTIFY →' : 'OUVRIR LE DOSSIER →'}</span>
+    <span class="case-card__link">{c.spotify ? 'ÉCOUTER SUR SPOTIFY →' : external ? 'VOIR LE PROJET →' : 'OUVRIR LE DOSSIER →'}</span>
   </a>
 </article>
 
