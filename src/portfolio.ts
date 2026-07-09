@@ -16,6 +16,8 @@ export type ShowcaseProject = {
   image?: string;
 };
 
+export type Platform = { name: string; note: string; color: string };
+
 export type ServiceFolder = {
   id: string;
   n: string;          // 01..06
@@ -27,6 +29,11 @@ export type ServiceFolder = {
   desc: string;       // descriptif « comment on travaille »
   steps: string[];    // méthode en 3 temps
   projects: ShowcaseProject[];
+  /** Vitrine alternative (au lieu des projets) :
+   *  - `platforms` : cartes de plateformes (ex. Ads → Meta / YouTube / TikTok)
+   *  - `graphic: 'calendar'` : mini calendrier éditorial (ex. Stratégies) */
+  platforms?: Platform[];
+  graphic?: 'calendar';
 };
 
 export const folders: ServiceFolder[] = [
@@ -104,11 +111,8 @@ export const folders: ServiceFolder[] = [
     title: 'On commence là où les autres s’arrêtent : le plan.',
     desc: 'La création sans stratégie, c’est du bruit. On audite votre présence, on fixe un positionnement clair, puis on construit une ligne éditoriale, un calendrier et des formats par plateforme — avec des objectifs mesurables. On ne publie pas au hasard : on construit une présence.',
     steps: ['Audit + positionnement', 'Ligne éditoriale + calendrier', 'Pilotage & itérations mensuelles'],
-    projects: [
-      { title: 'Beyond Horizons', meta: 'STRATÉGIE 360°', result: 'De 0 à 50K en 8 mois' },
-      { title: 'LaFabriek City Gate', meta: 'CONTENT PLAN', result: 'Présence multi-plateforme' },
-      { title: 'Apac-W', meta: 'BRAND CONTENT', result: 'Calendrier internalisé' },
-    ],
+    projects: [],
+    graphic: 'calendar',
   },
   {
     id: 'ads',
@@ -120,10 +124,11 @@ export const folders: ServiceFolder[] = [
     title: 'On met du budget là où ça convertit.',
     desc: 'Création publicitaire, ciblage chirurgical, A/B testing et reporting clair sur Meta & TikTok. Chaque euro investi est suivi, lu et optimisé. Pas de magie, pas de promesses en l’air : de la méthode, des chiffres, et des ajustements en continu jusqu’à ce que la campagne performe.',
     steps: ['Création + ciblage', 'A/B testing + scaling', 'Reporting & optimisation continue'],
-    projects: [
-      { title: 'Go Electra', meta: 'META + TIKTOK ADS', result: 'CPA −38%' },
-      { title: 'Marius la Nuit', meta: 'CAMPAGNE ACQUISITION', result: 'ROAS 5,2' },
-      { title: 'DUMB', meta: 'ADS CRÉA + MÉDIA', result: '+220% de conversions' },
+    projects: [],
+    platforms: [
+      { name: 'Meta', note: 'Facebook & Instagram Ads', color: 'var(--bleu)' },
+      { name: 'YouTube', note: 'Vidéo & Shorts Ads', color: 'var(--corail)' },
+      { name: 'TikTok', note: 'Spark Ads & For You', color: 'var(--lila)' },
     ],
   },
 ];
