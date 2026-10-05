@@ -475,7 +475,8 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
   @keyframes sr-folderIn { from { transform: translateX(118%) rotate(7deg); } to { transform: rotate(var(--r, 0deg)); } }
   @keyframes sr-tabUp { from { transform: scaleY(0); opacity: 0; } 35% { opacity: 1; } to { transform: none; opacity: 1; } }
   @keyframes sr-rise { from { transform: translateY(135%); opacity: 0; } 35% { opacity: 1; } to { transform: none; opacity: 1; } }
-  @keyframes sr-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  /* le masque finit un peu plus large que le mot : la dernière lettre (et les jambages) ne sont jamais rognés */
+  @keyframes sr-type { from { clip-path: inset(-.3em 100% -.3em 0); } to { clip-path: inset(-.3em -.5em -.3em 0); } }
   @keyframes sr-pop { 0% { transform: scale(0) rotate(var(--r, 0deg)); } 70% { transform: scale(1.12) rotate(var(--r, 0deg)); } 100% { transform: scale(1) rotate(var(--r, 0deg)); } }
   @keyframes sr-drop { 0% { transform: translateY(-700px) rotate(-20deg); } 58% { transform: translateY(0) rotate(-4deg) scale(1, 1); } 70% { transform: translateY(0) rotate(-4deg) scale(1.14, .84); } 84% { transform: translateY(-16px) rotate(-3deg) scale(.96, 1.05); } 100% { transform: translateY(0) rotate(-3deg); } }
   @keyframes sr-stamp { 0% { opacity: 0; transform: scale(2.6) rotate(-14deg); } 55% { opacity: 1; transform: scale(1) rotate(var(--r, -2deg)); } 68% { opacity: 1; transform: scale(1.1, .86) rotate(var(--r, -2deg)); } 84% { opacity: 1; transform: scale(.97, 1.04) rotate(var(--r, -2deg)); } 100% { opacity: 1; transform: scale(1) rotate(var(--r, -2deg)); } }
