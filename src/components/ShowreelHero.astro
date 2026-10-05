@@ -404,6 +404,7 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
   </div>
 
   <div class="sr-ctrl">
+    <button type="button" class="sr-btn" data-sr-restart aria-label="Recommencer l'animation depuis le début"><span class="sr-ico">↻</span><span class="sr-txt">Recommencer</span></button>
     <button type="button" class="sr-btn" data-sr-pause aria-label="Mettre l'animation en pause"><span class="sr-ico" data-ico>❚❚</span><span class="sr-txt" data-txt>Pause</span></button>
     <button type="button" class="sr-btn sr-btn--sound" data-sr-sound aria-pressed="false" aria-label="Activer le son"><span class="sr-ico" data-ico>♪</span><span class="sr-txt" data-txt>Activer le son</span></button>
   </div>
@@ -565,6 +566,7 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
     tagTxt: HTMLElement;
     pauseBtn: HTMLButtonElement;
     soundBtn: HTMLButtonElement;
+    restartBtn: HTMLButtonElement;
 
     scene: number | null = null;
     paused = false;
@@ -576,6 +578,7 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
     ctx: AudioContext | null = null;
     audioOn = false;
     aStart = 0;
+    comp!: DynamicsCompressorNode;
     music!: GainNode;
     sfx!: GainNode;
     noise!: AudioBuffer;
@@ -603,6 +606,7 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
       this.tagTxt = q('[data-sr-tagtxt]');
       this.pauseBtn = q('[data-sr-pause]');
       this.soundBtn = q('[data-sr-sound]');
+      this.restartBtn = q('[data-sr-restart]');
 
       // mise à l'échelle « cover » de l'artboard 1080×1080
       const fit = () => {
@@ -619,6 +623,7 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
 
       this.pauseBtn.addEventListener('click', () => this.onPause());
       this.soundBtn.addEventListener('click', () => this.onSound());
+      this.restartBtn.addEventListener('click', () => this.onRestart());
 
       // mouvement réduit : image fixe de l'intro, lecture sur demande
       if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -701,9 +706,25 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
       this.syncButtons();
     }
 
+    // Le son ne touche qu'au son : l'animation continue là où elle en est.
     onSound() {
       if (this.audioOn) this.stopAudio();
-      else { this.leaveStatic(); this.paused = false; this.startAudio(); }
+      else { this.leaveStatic(); this.startAudio(); }
+      this.syncButtons();
+    }
+
+    onRestart() {
+      this.leaveStatic();
+      if (this.audioOn && this.ctx) {
+        this.newBuses(); // coupe les sons déjà programmés
+        this.aStart = this.ctx.currentTime;
+        this.nextIdx = 0; this.loopN = 0;
+        this.pump();
+      } else {
+        this.t0 = performance.now();
+      }
+      this.scene = null; // force le remontage de l'intro
+      this.setScene(0);
       this.syncButtons();
     }
 
@@ -728,24 +749,34 @@ const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: 
     startAudio() {
       const AC = window.AudioContext || (window as any).webkitAudioContext;
       if (!AC) return;
+      // position actuelle de l'animation : la musique démarre de là, sans relancer l'image
+      const now = Math.max(0, this.loopTime()) % TOTAL;
       const ctx: AudioContext = new AC();
       this.ctx = ctx;
-      const comp = ctx.createDynamicsCompressor();
-      comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.005; comp.release.value = 0.2;
-      comp.connect(ctx.destination);
-      this.music = ctx.createGain(); this.music.gain.value = MUSIC_VOL; this.music.connect(comp);
-      this.sfx = ctx.createGain(); this.sfx.gain.value = SFX_VOL; this.sfx.connect(comp);
+      this.comp = ctx.createDynamicsCompressor();
+      this.comp.threshold.value = -16; this.comp.ratio.value = 3; this.comp.attack.value = 0.005; this.comp.release.value = 0.2;
+      this.comp.connect(ctx.destination);
+      this.newBuses();
       const len = ctx.sampleRate * 2;
       this.noise = ctx.createBuffer(1, len, ctx.sampleRate);
       const d = this.noise.getChannelData(0);
       for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
       this.events = this.buildEvents();
-      this.aStart = ctx.currentTime + 0.25;
-      this.nextIdx = 0; this.loopN = 0;
+      this.aStart = ctx.currentTime - now;
+      const next = this.events.findIndex((e) => e[0] >= now);
+      this.nextIdx = next < 0 ? 0 : next;
+      this.loopN = next < 0 ? 1 : 0;
       this.audioOn = true;
-      this.setScene(-1); // l'image repart du début, calée sur la musique
       this.sched = window.setInterval(() => this.pump(), 40);
       this.pump();
+    }
+
+    // (re)crée les bus musique / bruitages ; débrancher les anciens coupe ce qui était déjà programmé
+    newBuses() {
+      const ctx = this.ctx!;
+      try { this.music?.disconnect(); this.sfx?.disconnect(); } catch (e) { /* rien à couper */ }
+      this.music = ctx.createGain(); this.music.gain.value = MUSIC_VOL; this.music.connect(this.comp);
+      this.sfx = ctx.createGain(); this.sfx.gain.value = SFX_VOL; this.sfx.connect(this.comp);
     }
 
     stopAudio() {
