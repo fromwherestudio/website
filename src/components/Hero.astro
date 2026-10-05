@@ -1,4 +1,6 @@
 ---
+import ShowreelHero from './ShowreelHero.astro';
+
 const stats = [
   { value: '57', label: 'projets livrés', bg: 'var(--jaune)', color: '#473a12', border: true },
   { value: '4 ans', label: 'de studio', bg: 'var(--vert)', color: '#26361d', border: true },
@@ -23,8 +25,7 @@ const stats = [
 
   <div class="hero__right">
     <div class="hero__reel">
-      <div class="hero__play" aria-hidden="true">▶</div>
-      <span class="hero__reel-label">[ SHOWREEL 2026 — vidéo plein cadre ]</span>
+      <ShowreelHero />
     </div>
     <div class="hero__stats">
       {stats.map((s) => (
@@ -105,34 +106,10 @@ const stats = [
     grid-template-rows: 1fr auto;
   }
   .hero__reel {
-    background-image: repeating-linear-gradient(45deg, rgba(242, 235, 221, .07) 0 11px, transparent 11px 22px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-bottom: 1.5px solid #4a463c;
     position: relative;
+    overflow: hidden;
     min-height: 360px;
-  }
-  .hero__play {
-    width: 74px;
-    height: 74px;
-    border-radius: 50%;
-    border: 1.5px solid var(--paper);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--paper);
-    font-size: 24px;
-    padding-left: 4px;
-  }
-  .hero__reel-label {
-    position: absolute;
-    bottom: 20px;
-    left: 24px;
-    font-family: var(--font-mono);
-    font-size: 12px;
-    color: #bdb29a;
-    letter-spacing: .08em;
   }
   .hero__stats { display: grid; grid-template-columns: 1fr 1fr 1fr; }
   .hero__stat { padding: 22px; font-family: var(--font-title); }
@@ -142,7 +119,7 @@ const stats = [
   @media (max-width: 860px) {
     .hero { grid-template-columns: 1fr; min-height: 0; }
     .hero__left { padding: 56px 22px; border-right: none; border-bottom: var(--border); }
-    .hero__reel { min-height: 260px; }
+    .hero__reel { min-height: 320px; }
     /* évite que le badge chevauche le kicker */
     .hero__badge { top: 16px; right: 16px; width: 52px; height: 52px; }
     .hero__kicker { padding-right: 72px; }

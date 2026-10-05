@@ -1,0 +1,894 @@
+---
+/* =================================================================
+   Showreel motion design du hero (boucle 38,4 s, 1080×1080).
+   Porté depuis l'export Claude Design « Showreel hero 1080×1080 ».
+   - L'artboard 1080×1080 est mis à l'échelle (cover) dans son conteneur ;
+     tout le texte vit dans la bande centrale 1080×700 (zone de sécurité).
+   - Chaque scène est un <template> remonté à son tour : les animations
+     CSS repartent de zéro à chaque passage.
+   - Son : synthétisé dans le navigateur (Web Audio), uniquement après
+     un clic sur « Activer le son ».
+   ================================================================= */
+
+const feedCols = ['#C9A877', '#A6C6E2', '#EFD27E', '#E8A492', '#AEC9A2', '#C7B6E6'];
+const feedA = [0, 1, 2, 3, 4].map((i) => ({ bg: feedCols[i], to: [128, 412, 76, 903, 255][i], d: (1.2 + i * 0.9).toFixed(2) }));
+const feedB = [0, 1, 2, 3, 4].map((i) => ({ bg: feedCols[(i + 3) % 6], to: [64, 310, 587, 142, 820][i], d: (1.3 + i * 0.9).toFixed(2) }));
+const hs = [30, 52, 70, 44, 80, 60, 36, 74, 84, 48, 66, 28, 58, 78, 40, 62, 34, 50];
+const bars = hs.map((h, i) => ({ h, dur: (0.32 + ((i * 7) % 5) * 0.07).toFixed(2), d: (0.9 + (i % 6) * 0.05).toFixed(2) }));
+const panes = [
+  { x: 0, sx: -22, sy: 18, r: -4, cam: 'CAM A', clip: 'EXTRAIT 1', d: 2.05 },
+  { x: 116, sx: 0, sy: -10, r: 1, cam: 'CAM B', clip: 'EXTRAIT 2', d: 2.15 },
+  { x: 233, sx: 22, sy: 18, r: 4, cam: 'CAM C', clip: 'EXTRAIT 3', d: 2.25 },
+];
+const pattern = [
+  { label: 'INSTA', bg: '#C7B6E6', on: [1, 0, 1, 0, 1, 1, 0] },
+  { label: 'TIKTOK', bg: '#E8A492', on: [0, 1, 1, 0, 1, 0, 1] },
+  { label: 'YOUTUBE', bg: '#A6C6E2', on: [0, 0, 0, 1, 0, 0, 1] },
+  { label: 'LINKEDIN', bg: '#AEC9A2', on: [1, 0, 0, 1, 0, 0, 0] },
+];
+let k = 0;
+const cal = pattern.map((row) => ({
+  label: row.label,
+  cells: row.on.map((on) => ({ bg: on ? row.bg : 'transparent', d: on ? (1.05 + k++ * 0.07).toFixed(2) : '0' })),
+}));
+const prints = [
+  { x: 0, y: 14, r: -8, fx: 460, fy: -260, d: 0.55, bg: '#EFD27E', glyph: '▶', cap: 'SCÈNE' },
+  { x: 172, y: 0, r: 6, fx: 400, fy: 300, d: 0.7, bg: '#E8A492', glyph: '●', cap: 'FOULE' },
+  { x: 14, y: 250, r: 5, fx: 500, fy: 120, d: 0.85, bg: '#A6C6E2', glyph: '▶', cap: 'BACKSTAGE' },
+  { x: 178, y: 262, r: -6, fx: 380, fy: -320, d: 1.0, bg: '#C7B6E6', glyph: '↗', cap: 'REPLAY' },
+];
+const avatars = ['#C9A877', '#A6C6E2', '#EFD27E', '#E8A492', '#AEC9A2', '#C7B6E6', '#C9A877', '#A6C6E2']
+  .map((bg, i) => ({ bg, d: (2.45 + i * 0.18).toFixed(2) }));
+const plusOnes = [{ x: 40, d: 2.7 }, { x: 120, d: 3.1 }, { x: 200, d: 3.5 }, { x: 80, d: 3.9 }];
+const days = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+const nodeX = [320, 460, 600, 740, 880];
+
+const folder = 'position: absolute; left: 60px; top: 196px; width: 960px; height: 580px; box-sizing: border-box; border: 3px solid #221F18; border-radius: 6px; box-shadow: 14px 14px 0 #46413a; color: #221F18';
+const tab = 'position: absolute; left: 40px; top: -3px; height: 54px; padding: 0 24px; display: flex; align-items: center; background: #F2EBDD; border: 3px solid #221F18; border-radius: 0 0 12px 12px; font-size: 20px';
+const kicker = 'margin-top: 34px; display: inline-block; padding: 12px 18px; background: #F2EBDD; border: 3px solid #221F18; box-shadow: 5px 5px 0 rgba(34,31,24,.22)';
+const adCard = 'position: absolute; width: 196px; height: 132px; box-sizing: border-box; padding: 14px 16px; border: 3px solid #221F18; border-radius: 6px; box-shadow: 6px 6px 0 rgba(34,31,24,.22); display: flex; flex-direction: column; justify-content: space-between';
+const chip = 'position: absolute; padding: 10px 12px; border: 3px solid #221F18; box-shadow: 4px 4px 0 rgba(34,31,24,.22); font-size: 15px; letter-spacing: .06em; background-color: #F2EBDD';
+const stat = 'position: relative; width: 290px; height: 250px; box-sizing: border-box; padding: 24px; border: 3px solid #221F18; border-radius: 4px; box-shadow: 10px 10px 0 #46413a; color: #221F18';
+const plus = 'position: absolute; padding: 3px 6px; background: #221F18; color: #F2EBDD; font-size: 14px';
+---
+
+<div class="sr" data-sr>
+  <div class="sr-stage hatchd" data-sr-stage aria-hidden="true">
+    <div data-sr-scenes></div>
+
+    <!-- ============ 0 · INTRO ============ -->
+    <template data-scene="0">
+      <div class="scene out" style="animation-delay: 3.85s">
+        <div style="position: absolute; left: 0; top: 206px; width: 1080px; display: flex; justify-content: center; align-items: center; gap: 22px">
+          <div class="drop B" style="width: 112px; height: 112px; box-sizing: border-box; background: #EFD27E; border: 3px solid #221F18; border-radius: 16px 16px 4px 4px; box-shadow: 8px 8px 0 #C9A877; display: flex; align-items: center; justify-content: center; font-size: 58px; color: #221F18; letter-spacing: -.04em; animation-delay: .15s">FW</div>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span class="type" style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 62px; letter-spacing: -.03em; line-height: .9; color: #F2EBDD; animation-delay: .8s; animation-duration: .6s; animation-timing-function: steps(9)">fromwhere</span>
+            <span class="type M" style="font-size: 18px; letter-spacing: .42em; color: #C9A877; animation-delay: 1.3s; animation-duration: .35s; animation-timing-function: steps(6)">STUDIO</span>
+          </div>
+        </div>
+        <div class="B" style="position: absolute; left: 0; top: 368px; width: 1080px; text-align: center; font-size: 150px; color: #F2EBDD">
+          <span class="ln"><span style="animation-delay: 1.45s">FILMER</span></span>
+          <span class="ln"><span style="animation-delay: 1.6s">CE QUI</span></span>
+          <span class="ln"><span class="em emy" style="animation-delay: 1.75s">COMPTE.</span></span>
+        </div>
+        <div style="position: absolute; left: 0; top: 790px; width: 1080px; text-align: center">
+          <span class="type M" style="font-size: 22px; color: #C9A877; animation-delay: 2.5s; animation-duration: .9s; animation-timing-function: steps(36)">PRODUCTION AUDIOVISUELLE · BRUXELLES</span>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ 1 · ACCROCHE ============ -->
+    <template data-scene="1">
+      <div class="scene out" style="animation-delay: 2.05s">
+        <div style="position: absolute; left: 0; top: 268px; width: 1080px; text-align: center">
+          <span class="type M" style="font-size: 32px; color: #EFD27E; animation-delay: .1s; animation-duration: .5s; animation-timing-function: steps(15)">CE QUI COMPTE ?</span>
+        </div>
+        <div class="B" style="position: absolute; left: 0; top: 340px; width: 1080px; text-align: center; font-size: 186px; color: #F2EBDD">
+          <span class="ln"><span style="animation-delay: .45s">Votre</span></span>
+          <span class="ln"><span class="em emc" style="animation-delay: .6s">histoire.</span></span>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ 2 · ADS (Kraft) ============ -->
+    <template data-scene="2">
+      <div class="scene out" style="animation-delay: 5.05s">
+        <div class="folderIn" style={`${folder}; background: #C9A877; --r: -0.6deg`}>
+          <div class="tabUp M" style={`${tab}; animation-delay: .45s`}>DOSSIER 01 — ADS</div>
+          <div style="position: absolute; left: 48px; top: 104px; width: 510px">
+            <div class="B" style="font-size: 70px; color: #221F18">
+              <span class="ln"><span style="animation-delay: .6s">On la crée.</span></span>
+              <span class="ln"><span style="animation-delay: .75s">On la tourne.</span></span>
+              <span class="ln"><span style="animation-delay: .9s">On la fait</span></span>
+              <span class="ln"><span class="em" style="animation-delay: 1.05s">performer.</span></span>
+            </div>
+            <div class="pop" style={`${kicker}; --r: -1.5deg; animation-delay: 1.4s`}>
+              <span class="type M" style="font-size: 20px; color: #221F18; animation-delay: 1.6s; animation-duration: .8s; animation-timing-function: steps(26)">CRÉA · TOURNAGE · PILOTAGE</span>
+            </div>
+          </div>
+          <div style="position: absolute; left: 572px; top: 66px; width: 350px; height: 460px">
+            <div class="float" style="position: absolute; left: 0; top: 0; width: 350px; height: 230px; animation-delay: 2s">
+              <div class="toss" style={`${adCard}; left: 0; top: 46px; background: #A6C6E2; --r: -9deg; --fx: 520px; --fy: -120px; animation-delay: .95s`}>
+                <span class="M" style="font-size: 13px">ADS ↗</span><span class="B" style="font-size: 44px">Meta</span>
+              </div>
+              <div class="toss" style={`${adCard}; left: 78px; top: 22px; background: #E8A492; --r: -1deg; --fx: 520px; --fy: 60px; animation-delay: 1.1s`}>
+                <span class="M" style="font-size: 13px">ADS ▶</span><span class="B" style="font-size: 44px">YouTube</span>
+              </div>
+              <div class="toss" style={`${adCard}; left: 154px; top: 58px; background: #C7B6E6; --r: 8deg; --fx: 520px; --fy: 200px; animation-delay: 1.25s`}>
+                <span class="M" style="font-size: 13px">ADS ↗</span><span class="B" style="font-size: 44px">TikTok</span>
+              </div>
+            </div>
+            <div class="pop hatch" style="position: absolute; left: 0; top: 256px; width: 350px; height: 196px; box-sizing: border-box; background-color: #F2EBDD; border: 3px solid #221F18; border-radius: 4px; box-shadow: 8px 8px 0 rgba(34,31,24,.22); --r: 1deg; animation-delay: 1.5s">
+              <span class="M" style="position: absolute; left: 14px; top: 12px; font-size: 13px">PILOTAGE</span>
+              <svg width="344" height="190" viewBox="0 0 344 190" style="position: absolute; left: 0; top: 0">
+                <polyline class="draw" pathLength="1000" points="22,168 82,168 82,136 142,136 142,104 202,104 202,72 262,72 262,44 318,44" fill="none" stroke="#221F18" stroke-width="6" stroke-linejoin="miter" style="animation-delay: 1.8s"></polyline>
+              </svg>
+              <span class="pop B" style="position: absolute; right: 12px; top: 0; font-size: 48px; color: #221F18; animation-delay: 3.2s">↗</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ 3 · RÉSEAUX (Lila) ============ -->
+    <template data-scene="3">
+      <div class="scene out" style="animation-delay: 5.05s">
+        <div class="folderIn" style={`${folder}; background: #C7B6E6; --r: 0.5deg`}>
+          <div class="tabUp M" style={`${tab}; animation-delay: .45s`}>DOSSIER 02 — RÉSEAUX</div>
+          <div style="position: absolute; left: 48px; top: 104px; width: 510px">
+            <div class="B" style="font-size: 76px; color: #221F18">
+              <span class="ln"><span style="animation-delay: .6s">Petits</span></span>
+              <span class="ln"><span style="animation-delay: .75s">formats,</span></span>
+              <span class="ln"><span class="em" style="animation-delay: .9s">grandes</span></span>
+              <span class="ln"><span class="em" style="animation-delay: 1.05s">communautés.</span></span>
+            </div>
+            <div class="pop" style={`${kicker}; padding: 12px 16px; --r: 1.2deg; animation-delay: 1.4s`}>
+              <span class="type M" style="font-size: 17px; letter-spacing: .1em; color: #221F18; animation-delay: 1.6s; animation-duration: 1s; animation-timing-function: steps(40)">FORMATS COURTS · CALENDRIER · COMMUNAUTÉ</span>
+            </div>
+          </div>
+          <div class="pop hatch" style="position: absolute; left: 572px; top: 60px; width: 350px; height: 470px; box-sizing: border-box; overflow: hidden; background-color: #EAE0CD; border: 3px solid #221F18; border-radius: 8px; box-shadow: 8px 8px 0 rgba(34,31,24,.22); --r: 0deg; animation-delay: .7s">
+            <div class="feed" style="position: absolute; left: 12px; top: 14px; width: 155px; animation-delay: 1s">
+              {feedA.map((f) => (
+                <div class="hatch" style={`position: relative; width: 155px; height: 276px; margin-bottom: 18px; box-sizing: border-box; background-color: ${f.bg}; border: 3px solid #221F18; border-radius: 6px`}>
+                  <span class="B" style="position: absolute; left: 0; top: 104px; width: 149px; text-align: center; font-size: 46px">▶</span>
+                  <span class="M" style="position: absolute; left: 10px; bottom: 10px; padding: 4px 6px; background: #F2EBDD; border: 2px solid #221F18; font-size: 13px; letter-spacing: .06em">♥ <span class="count" style={`--to: ${f.to}; animation-delay: ${f.d}s`}></span>K</span>
+                </div>
+              ))}
+            </div>
+            <div class="feed" style="position: absolute; left: 180px; top: -126px; width: 155px; animation-delay: 1.15s">
+              {feedB.map((f) => (
+                <div class="hatch" style={`position: relative; width: 155px; height: 276px; margin-bottom: 18px; box-sizing: border-box; background-color: ${f.bg}; border: 3px solid #221F18; border-radius: 6px`}>
+                  <span class="B" style="position: absolute; left: 0; top: 104px; width: 149px; text-align: center; font-size: 46px">▶</span>
+                  <span class="M" style="position: absolute; left: 10px; bottom: 10px; padding: 4px 6px; background: #F2EBDD; border: 2px solid #221F18; font-size: 13px; letter-spacing: .06em">▶ <span class="count" style={`--to: ${f.to}; animation-delay: ${f.d}s`}></span>K</span>
+                </div>
+              ))}
+            </div>
+            <div class="thumb" style="position: absolute; left: 150px; top: 330px; width: 46px; height: 46px; box-sizing: border-box; border-radius: 50%; background: #221F18; border: 3px solid #F2EBDD; animation-delay: 1.6s"></div>
+          </div>
+          <div class="pop" style="position: absolute; left: 596px; top: 432px; width: 304px; box-sizing: border-box; padding: 12px 14px 14px; background: #F2EBDD; border: 3px solid #221F18; border-radius: 4px; box-shadow: 7px 7px 0 rgba(34,31,24,.25); --r: -3deg; animation-delay: 2.2s">
+            <div class="M" style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 10px"><span>VOTRE COMMUNAUTÉ</span><span class="B" style="font-size: 22px; letter-spacing: 0; line-height: 14px">↗</span></div>
+            <div style="display: flex; align-items: center">
+              {avatars.map((a) => (
+                <div class="pop" style={`width: 36px; height: 36px; margin-right: -10px; box-sizing: border-box; border-radius: 50%; border: 3px solid #221F18; background: ${a.bg}; animation-delay: ${a.d}s`}></div>
+              ))}
+              <div class="pop B" style="margin-left: 18px; width: 36px; height: 36px; box-sizing: border-box; border-radius: 50%; border: 3px dashed #221F18; display: flex; align-items: center; justify-content: center; font-size: 24px; letter-spacing: 0; animation-delay: 3.9s">+</div>
+            </div>
+            {plusOnes.map((q) => (
+              <span class="plusOne M" style={`position: absolute; left: ${q.x}px; top: -6px; padding: 3px 6px; background: #221F18; color: #F2EBDD; font-size: 13px; letter-spacing: .04em; animation-delay: ${q.d}s`}>+1</span>
+            ))}
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ 4 · PODCASTS (Bleu) ============ -->
+    <template data-scene="4">
+      <div class="scene out" style="animation-delay: 5.05s">
+        <div class="folderIn" style={`${folder}; background: #A6C6E2; --r: -0.5deg`}>
+          <div class="tabUp M" style={`${tab}; animation-delay: .45s`}>DOSSIER 03 — PODCASTS</div>
+          <div class="stamp M" style="position: absolute; left: 448px; top: 14px; padding: 8px 14px; border: 3px dashed #221F18; font-size: 17px; color: #221F18; --r: -3deg; animation-delay: 1.6s">NOTRE SPÉCIALITÉ</div>
+          <div style="position: absolute; left: 48px; top: 104px; width: 510px">
+            <div class="B" style="font-size: 74px; color: #221F18">
+              <span class="ln"><span style="animation-delay: .6s">On installe</span></span>
+              <span class="ln"><span style="animation-delay: .75s">un format,</span></span>
+              <span class="ln"><span class="em" style="animation-delay: .9s">pas un</span></span>
+              <span class="ln"><span class="em" style="animation-delay: 1.05s">épisode.</span></span>
+            </div>
+            <div class="pop" style={`${kicker}; --r: -1.2deg; animation-delay: 1.4s`}>
+              <span class="type M" style="font-size: 20px; color: #221F18; animation-delay: 1.6s; animation-duration: .8s; animation-timing-function: steps(28)">DÉCOR · MULTI-CAM · EXTRAITS</span>
+            </div>
+          </div>
+          <div style="position: absolute; left: 572px; top: 82px; width: 350px; height: 450px">
+            <div class="pop" style="position: absolute; left: 0; top: 0; width: 350px; height: 132px; box-sizing: border-box; background: #F2EBDD; border: 3px solid #221F18; border-radius: 4px; box-shadow: 8px 8px 0 rgba(34,31,24,.22); --r: -1deg; animation-delay: .8s">
+              <span class="M" style="position: absolute; left: 12px; top: 10px; font-size: 13px"><span style="color: #E8A492">●</span> REC</span>
+              <div style="position: absolute; left: 18px; top: 34px; width: 308px; height: 84px; display: flex; align-items: center; gap: 8px">
+                {bars.map((b) => (
+                  <div class="bar" style={`width: 9px; height: ${b.h}px; background: #221F18; animation-duration: ${b.dur}s; animation-delay: ${b.d}s`}></div>
+                ))}
+              </div>
+            </div>
+            <div style="position: absolute; left: 0; top: 176px; width: 350px; height: 197px">
+              <div class="pop hatch" style="position: absolute; left: 0; top: 0; width: 350px; height: 197px; box-sizing: border-box; background-color: #EAE0CD; border: 3px solid #221F18; border-radius: 4px; --r: 0deg; animation-delay: 1.1s">
+                <div class="fadeOut" style="width: 100%; height: 100%; animation-delay: 3.05s"></div>
+              </div>
+              <span class="pop B" style="position: absolute; left: 0; top: 64px; width: 350px; text-align: center; font-size: 60px; animation-delay: 1.3s"><span class="fadeOut" style="display: inline-block; animation-delay: 1.85s">▶</span></span>
+              <div class="growY" style="position: absolute; left: 115px; top: 0; width: 3px; height: 197px; background: #221F18; animation-delay: 1.9s"><div class="fadeOut" style="width: 100%; height: 100%; animation-delay: 3.05s"></div></div>
+              <div class="growY" style="position: absolute; left: 232px; top: 0; width: 3px; height: 197px; background: #221F18; animation-delay: 2s"><div class="fadeOut" style="width: 100%; height: 100%; animation-delay: 3.05s"></div></div>
+              {panes.map((p) => (
+                <div class="split" style={`position: absolute; left: ${p.x}px; top: 0; width: 117px; height: 197px; box-sizing: border-box; border: 3px solid transparent; border-radius: 4px; background-color: transparent; --sx: ${p.sx}px; --sy: ${p.sy}px; --r: ${p.r}deg; animation-delay: 3.1s`}>
+                  <span class="pop M" style={`position: absolute; left: 8px; top: 8px; padding: 3px 5px; background: #221F18; color: #F2EBDD; font-size: 12px; letter-spacing: .08em; animation-delay: ${p.d}s`}><span class="fadeOut" style="display: inline-block; animation-delay: 3.05s">{p.cam}</span></span>
+                  <span class="fadeIn B" style="position: absolute; left: 0; top: 68px; width: 111px; text-align: center; font-size: 40px; animation-delay: 3.4s">▶</span>
+                  <span class="fadeIn M" style="position: absolute; left: 0; bottom: 10px; width: 111px; text-align: center; font-size: 12px; letter-spacing: .1em; animation-delay: 3.5s">{p.clip}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ 5 · STRATÉGIE (Jaune) ============ -->
+    <template data-scene="5">
+      <div class="scene out" style="animation-delay: 5.05s">
+        <div class="folderIn" style={`${folder}; background: #EFD27E; --r: 0.6deg`}>
+          <div class="tabUp M" style={`${tab}; animation-delay: .45s`}>DOSSIER 04 — STRATÉGIE</div>
+          <div style="position: absolute; left: 48px; top: 120px; width: 510px">
+            <div class="B" style="font-size: 92px; color: #221F18">
+              <span class="ln"><span style="animation-delay: .6s">Une marque</span></span>
+              <span class="ln"><span style="animation-delay: .75s">qu'on</span></span>
+              <span class="ln"><span class="em" style="animation-delay: .9s">reconnaît.</span></span>
+            </div>
+            <div class="pop" style={`${kicker}; margin-top: 40px; padding: 12px 16px; --r: -1.4deg; animation-delay: 1.3s`}>
+              <span class="type M" style="font-size: 17px; letter-spacing: .1em; color: #221F18; animation-delay: 1.5s; animation-duration: 1s; animation-timing-function: steps(40)">POSITIONNEMENT · LIGNE ÉDITO · CALENDRIER</span>
+            </div>
+          </div>
+          <div style="position: absolute; left: 572px; top: 64px; width: 350px; height: 470px">
+            <div class="pop" style="position: absolute; left: 0; top: 0; width: 350px; box-sizing: border-box; padding: 14px; background: #F2EBDD; border: 3px solid #221F18; border-radius: 4px; box-shadow: 8px 8px 0 rgba(34,31,24,.22); --r: 1deg; animation-delay: .75s">
+              <div style="display: flex; gap: 4px; margin-bottom: 6px; padding-left: 62px">
+                {days.map((dd) => <span class="M" style="width: 32px; text-align: center; font-size: 14px; letter-spacing: 0">{dd}</span>)}
+              </div>
+              {cal.map((row) => (
+                <div style="display: flex; align-items: center; gap: 4px; margin-bottom: 4px">
+                  <span class="M" style="width: 58px; font-size: 11px; letter-spacing: .02em">{row.label}</span>
+                  {row.cells.map((c) => (
+                    <div style="width: 32px; height: 32px; box-sizing: border-box; border: 2px solid #221F18; border-radius: 3px; overflow: hidden">
+                      <div class="pop" style={`width: 100%; height: 100%; background: ${c.bg}; animation-delay: ${c.d}s`}></div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+            <div style="position: absolute; left: 0; top: 256px; width: 350px; height: 200px">
+              <div class="chip M" style={`${chip}; left: 0; top: 0; --r: -2deg; animation-delay: 2.1s, 2.6s`}>AUDIT</div>
+              <div class="chip M" style={`${chip}; right: 0; top: 0; --r: 1.5deg; animation-delay: 2.2s, 3.2s`}>LIGNE ÉDITO</div>
+              <div class="chip M" style={`${chip}; right: 0; bottom: 0; --r: -1.5deg; animation-delay: 2.3s, 3.8s`}>CALENDRIER</div>
+              <div class="chip M" style={`${chip}; left: 0; bottom: 0; --r: 2deg; animation-delay: 2.4s, 4.4s`}>PILOTAGE</div>
+              <span class="pop B" style="position: absolute; left: 122px; top: 6px; font-size: 36px; animation-delay: 2.25s">→</span>
+              <span class="pop B" style="position: absolute; right: 52px; top: 76px; font-size: 36px; animation-delay: 2.35s">↓</span>
+              <span class="pop B" style="position: absolute; left: 162px; bottom: 4px; font-size: 36px; animation-delay: 2.45s">←</span>
+              <span class="pop B" style="position: absolute; left: 40px; top: 76px; font-size: 36px; animation-delay: 2.55s">↑</span>
+              <span class="pop" style="position: absolute; left: 146px; top: 70px; width: 60px; height: 60px; animation-delay: 2.5s"><span class="spin B" style="display: block; width: 60px; height: 60px; line-height: 60px; text-align: center; font-size: 52px; letter-spacing: 0">↻</span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ 6 · ÉVÉNEMENTIEL (Vert) ============ -->
+    <template data-scene="6">
+      <div class="scene out" style="animation-delay: 3.85s">
+        <div class="folderIn" style={`${folder}; background: #AEC9A2; --r: -0.6deg`}>
+          <div class="tabUp M" style={`${tab}; animation-delay: .4s`}>DOSSIER 05 — ÉVÉNEMENTIEL</div>
+          <div style="position: absolute; left: 48px; top: 120px; width: 510px">
+            <div class="B" style="font-size: 74px; color: #221F18">
+              <span class="ln"><span style="animation-delay: .5s">L'énergie</span></span>
+              <span class="ln"><span style="animation-delay: .65s">d'un moment,</span></span>
+              <span class="ln"><span class="em" style="animation-delay: .8s">en aftermovie.</span></span>
+            </div>
+            <div class="pop" style={`${kicker}; margin-top: 40px; --r: 1.4deg; animation-delay: 1.15s`}>
+              <span class="type M" style="font-size: 20px; color: #221F18; animation-delay: 1.3s; animation-duration: .7s; animation-timing-function: steps(28)">CAPTATION · MONTAGE · CAPSULES</span>
+            </div>
+          </div>
+          <div style="position: absolute; left: 572px; top: 52px; width: 350px; height: 480px">
+            {prints.map((p) => (
+              <div class="toss" style={`position: absolute; left: ${p.x}px; top: ${p.y}px; width: 168px; height: 206px; box-sizing: border-box; padding: 10px 10px 34px; background: #F2EBDD; border: 3px solid #221F18; box-shadow: 7px 7px 0 rgba(34,31,24,.25); --r: ${p.r}deg; --fx: ${p.fx}px; --fy: ${p.fy}px; animation-delay: ${p.d}s`}>
+                <div class="hatch" style={`position: relative; width: 100%; height: 100%; box-sizing: border-box; background-color: ${p.bg}; border: 2px solid #221F18`}>
+                  <span class="B" style="position: absolute; left: 0; top: 46px; width: 100%; text-align: center; font-size: 40px">{p.glyph}</span>
+                </div>
+                <span class="M" style="position: absolute; left: 12px; bottom: 9px; font-size: 12px">{p.cap}</span>
+              </div>
+            ))}
+            <div class="stamp M" style="position: absolute; left: 34px; top: 196px; padding: 10px 18px; background: #AEC9A2; border: 4px dashed #221F18; font-size: 34px; letter-spacing: .12em; color: #221F18; --r: -6deg; animation-delay: 1.8s">AFTERMOVIE</div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ 7 · OUTRO ============ -->
+    <template data-scene="7">
+      <div class="scene out" style="animation-delay: 5.65s">
+        <div style="position: absolute; left: 0; top: 206px; width: 1080px; text-align: center">
+          <span class="type M" style="font-size: 22px; color: #C9A877; animation-delay: .05s; animation-duration: .9s; animation-timing-function: steps(39)">LE STUDIO EN 3 CHIFFRES (POUR L'INSTANT)</span>
+        </div>
+        <div style="position: absolute; left: 75px; top: 266px; width: 930px; display: flex; gap: 30px">
+          <div class="toss" style={`${stat}; background: #EFD27E; --r: -2deg; --fx: 0px; --fy: -600px; animation-delay: .15s`}>
+            <div style="position: relative; height: 88px; overflow: hidden">
+              <div class="odo B" style="font-size: 100px; animation-delay: 1.1s">
+                <div style="height: 88px; line-height: 88px">57</div>
+                <div style="height: 88px; line-height: 88px">58</div>
+                <div style="height: 88px; line-height: 88px">59</div>
+                <div style="height: 88px; line-height: 88px">60</div>
+                <div style="height: 88px; line-height: 88px">61<span style="font-size: 50px">…</span></div>
+              </div>
+            </div>
+            <span class="plusOnce M" style={`${plus}; left: 150px; top: 40px; animation-delay: 1.3s`}>+1</span>
+            <span class="plusOnce M" style={`${plus}; left: 186px; top: 56px; animation-delay: 1.66s`}>+1</span>
+            <span class="plusOnce M" style={`${plus}; left: 160px; top: 70px; animation-delay: 2.02s`}>+1</span>
+            <span class="plusOnce M" style={`${plus}; left: 196px; top: 46px; animation-delay: 2.38s`}>+1</span>
+            <div style="position: absolute; left: 24px; bottom: 24px; height: 24px; width: 240px">
+              <span class="fadeOut M" style="position: absolute; left: 0; bottom: 0; font-size: 18px; animation-delay: 1.15s">PROJETS LIVRÉS</span>
+              <span class="fadeIn M" style="position: absolute; left: 0; bottom: 0; font-size: 18px; animation-delay: 1.35s">ET ÇA CONTINUE…</span>
+            </div>
+            <div class="stamp M" style="position: absolute; right: -34px; top: -26px; padding: 8px 12px; background: #F2EBDD; border: 3px solid #221F18; box-shadow: 4px 4px 0 rgba(34,31,24,.3); font-size: 16px; color: #221F18; white-space: nowrap; --r: 9deg; animation-delay: 2.6s">LE VÔTRE ?</div>
+          </div>
+
+          <div class="toss" style={`${stat}; background: #AEC9A2; display: flex; flex-direction: column; justify-content: space-between; --r: 1.5deg; --fx: 0px; --fy: -600px; animation-delay: .3s`}>
+            <span class="B" style="font-size: 100px"><span class="wobble" style="display: inline-block; animation-delay: 1.2s"><span class="count" style="--to: 4; animation-delay: .55s; animation-duration: .8s"></span></span><span style="font-size: 52px"> ans</span></span>
+            <div style="display: flex; flex-direction: column; gap: 8px">
+              <span class="M" style="font-size: 18px">DE STUDIO</span>
+              <span class="M" style="font-size: 12px; letter-spacing: .1em">5E ANNÉE : <span class="blink">CHARGEMENT…</span></span>
+              <div style="width: 236px; height: 16px; box-sizing: border-box; border: 3px solid #221F18; background: #F2EBDD">
+                <div class="load" style="width: 100%; height: 100%; background: #221F18; animation-delay: 1.3s"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="toss" style={`${stat}; background: #E8A492; display: flex; flex-direction: column; justify-content: space-between; --r: -1deg; --fx: 0px; --fy: -600px; animation-delay: .45s`}>
+            <span class="B" style="font-size: 100px"><span class="count" style="--to: 10; animation-delay: .7s; animation-duration: 1.1s"></span>M+</span>
+            <span class="M" style="font-size: 18px">DE VUES · <span class="fadeIn" style="animation-delay: 1.5s">ÇA MONTE</span></span>
+            <svg width="150" height="120" viewBox="0 0 150 120" style="position: absolute; right: -30px; top: -58px; overflow: visible">
+              <polyline class="draw" pathLength="1000" points="4,116 40,92 62,100 96,58 112,66 140,14" fill="none" stroke="#221F18" stroke-width="5" stroke-linejoin="round" stroke-linecap="round" style="animation-delay: 1.2s; animation-duration: .9s"></polyline>
+            </svg>
+            <span class="pop" style="position: absolute; right: -52px; top: -92px; animation-delay: 2s"><span class="rocket B" style="display: block; font-size: 64px; letter-spacing: 0; color: #E8A492; -webkit-text-stroke: 3px #221F18">↗</span></span>
+          </div>
+        </div>
+        <div style="position: absolute; left: 0; top: 572px; width: 1080px; text-align: center">
+          <span class="type" style="font-family: 'Space Mono', monospace; font-weight: 700; font-size: 38px; letter-spacing: .04em; color: #F2EBDD; animation-delay: 3.1s; animation-duration: .8s; animation-timing-function: steps(19)">fromwherestudio.com</span>
+        </div>
+        <div style="position: absolute; left: 0; top: 646px; width: 1080px; display: flex; justify-content: center">
+          <div class="stamp M" style="padding: 14px 28px; border: 4px dashed #EFD27E; font-size: 40px; letter-spacing: .1em; color: #EFD27E; --r: -2deg; animation-delay: 3.75s">OUVREZ UN DOSSIER <span class="nudge">→</span></div>
+        </div>
+      </div>
+    </template>
+
+    <!-- ============ FIL ROUGE (persistant, piloté en JS) ============ -->
+    <div data-sr-chrome style="position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; pointer-events: none; opacity: 0; transition: opacity .4s ease-out">
+      <div style="position: absolute; left: 60px; top: 52px; display: flex; align-items: center; gap: 14px">
+        <div class="B" style="width: 58px; height: 58px; box-sizing: border-box; background: #EFD27E; border: 3px solid #221F18; border-radius: 10px 10px 3px 3px; display: flex; align-items: center; justify-content: center; font-size: 30px; color: #221F18">FW</div>
+        <div style="display: flex; flex-direction: column; gap: 4px">
+          <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: -.03em; line-height: .9; color: #F2EBDD">fromwhere</span>
+          <span class="M" style="font-size: 11px; letter-spacing: .4em; color: #C9A877">STUDIO</span>
+        </div>
+      </div>
+      <div class="M" style="position: absolute; right: 60px; top: 70px; display: flex; align-items: center; gap: 12px; font-size: 18px; color: #F2EBDD">
+        <span data-sr-accent style="width: 18px; height: 18px; box-sizing: border-box; border: 2px solid #F2EBDD; background: #F2EBDD; transition: background .4s"></span>
+        <span data-sr-counter></span>
+      </div>
+
+      <div data-sr-thread style="position: absolute; left: 60px; top: 802px; width: 960px; height: 8px; transform-origin: 100% 50%">
+        <div data-sr-thread-in style="width: 960px; height: 8px; border-radius: 4px; background: #E8A492; transform: scaleX(0); transform-origin: 0 50%; transition: transform 1.1s cubic-bezier(.6,0,.2,1) .25s"></div>
+      </div>
+      <div style="position: absolute; left: 168px; top: 794px; width: 24px; height: 24px; box-sizing: border-box; border-radius: 50%; background: #E8A492; border: 3px solid #221F18"></div>
+      <span data-sr-arrow class="B" style="position: absolute; left: 1012px; top: 780px; font-size: 40px; color: #E8A492; opacity: 0; transition: opacity .3s 1.2s">→</span>
+      {nodeX.map((x, i) => (
+        <div data-sr-node class="M" style={`position: absolute; left: ${x - 17}px; top: 789px; width: 34px; height: 34px; box-sizing: border-box; border-radius: 50%; border: 3px solid #E8A492; background: #221F18; color: #F2EBDD; display: flex; align-items: center; justify-content: center; font-size: 12px; letter-spacing: 0; transition: background .35s, color .35s, transform .35s cubic-bezier(.2,1.6,.4,1)`}>0{i + 1}</div>
+      ))}
+
+      <div data-sr-tag style="position: absolute; left: 55px; top: 806px; width: 250px; transform: translateY(-40px); transition: left .9s cubic-bezier(.3,1.3,.5,1), transform .5s cubic-bezier(.2,1.5,.4,1)">
+        <div class="sway" style="position: relative; width: 250px">
+          <div style="position: absolute; left: 124px; top: 0; width: 3px; height: 16px; background: #E8A492"></div>
+          <div data-sr-tagbox style="position: absolute; left: 0; top: 14px; width: 250px; box-sizing: border-box; padding: 9px 14px 10px; background: #F2EBDD; border: 3px solid #221F18; border-radius: 4px; box-shadow: 6px 6px 0 #46413a; color: #221F18; text-align: center; transition: background .4s">
+            <div style="position: absolute; left: 117px; top: -8px; width: 16px; height: 16px; box-sizing: border-box; border-radius: 50%; background: #221F18; border: 3px solid #E8A492"></div>
+            <div class="M" style="font-size: 14px; letter-spacing: .2em">VOTRE HISTOIRE</div>
+            <div data-sr-tagtxt style="height: 30px; margin-top: 3px; position: relative"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- grain papier -->
+    <svg width="1080" height="1080" style="position: absolute; left: 0; top: 0; pointer-events: none; opacity: .07">
+      <filter id="srgrain"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" stitchTiles="stitch"></feTurbulence><feColorMatrix type="saturate" values="0"></feColorMatrix></filter>
+      <rect width="1080" height="1080" filter="url(#srgrain)"></rect>
+    </svg>
+  </div>
+
+  <div class="sr-ctrl">
+    <button type="button" class="sr-btn" data-sr-pause aria-label="Mettre l'animation en pause"><span class="sr-ico" data-ico>❚❚</span><span class="sr-txt" data-txt>Pause</span></button>
+    <button type="button" class="sr-btn sr-btn--sound" data-sr-sound aria-pressed="false" aria-label="Activer le son"><span class="sr-ico" data-ico>♪</span><span class="sr-txt" data-txt>Activer le son</span></button>
+  </div>
+</div>
+
+<style is:global>
+  @property --sr-n { syntax: '<integer>'; initial-value: 0; inherits: false; }
+
+  .sr { position: absolute; inset: 0; overflow: hidden; background: #221F18; }
+  .sr-stage {
+    position: absolute; left: 50%; top: 50%; width: 1080px; height: 1080px;
+    overflow: hidden; background-color: #221F18; color: #F2EBDD;
+    font-family: 'Hanken Grotesk', sans-serif;
+    transform: translate(-50%, -50%) scale(.6); visibility: hidden;
+  }
+  .sr-stage svg { max-width: none; }
+
+  .sr .B { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; letter-spacing: -.035em; line-height: .88; }
+  .sr .M { font-family: 'Space Mono', monospace; font-weight: 700; text-transform: uppercase; letter-spacing: .14em; }
+  .sr .em { font-style: italic; font-weight: 600; position: relative; display: inline-block; padding-right: .08em; }
+  .sr .em::after { content: ''; position: absolute; left: 0; right: .12em; bottom: .04em; height: .085em; background: #221F18; transform-origin: left; transform: scaleX(0); animation: sr-swipe 1s cubic-bezier(.6,0,.2,1) forwards; animation-delay: inherit; }
+  .sr .emy::after { background: #EFD27E; }
+  .sr .emc::after { background: #E8A492; }
+  .sr .hatch { background-image: repeating-linear-gradient(45deg, rgba(34,31,24,.07) 0 2px, transparent 2px 13px); }
+  .sr .hatchd, .sr-stage.hatchd { background-image: repeating-linear-gradient(45deg, rgba(242,235,221,.05) 0 2px, transparent 2px 16px); }
+  .sr .scene { position: absolute; left: 0; top: 0; width: 1080px; height: 1080px; }
+
+  .sr .out { animation: sr-sceneOut .35s cubic-bezier(.6,0,.9,.4) forwards; }
+  .sr .folderIn { animation: sr-folderIn .7s cubic-bezier(.18,1.25,.4,1) both; }
+  .sr .tabUp { transform-origin: 50% 0; animation: sr-tabUp .45s cubic-bezier(.2,1.4,.4,1) both; }
+  .sr .ln { display: block; overflow: hidden; padding: 0 .12em .1em 0; margin-bottom: -.1em; }
+  .sr .ln > span { display: inline-block; animation: sr-rise .6s cubic-bezier(.2,1.12,.4,1) both; }
+  .sr .type { display: inline-block; animation: sr-type .9s both; white-space: nowrap; }
+  .sr .pop { animation: sr-pop .4s cubic-bezier(.2,1.5,.4,1) both; }
+  .sr .drop { animation: sr-drop .8s cubic-bezier(.3,0,.3,1) both; }
+  .sr .stamp { animation: sr-stamp .55s cubic-bezier(.3,0,.3,1) both; }
+  .sr .toss { animation: sr-toss .65s cubic-bezier(.2,.9,.3,1) both; }
+  .sr .fadeIn { animation: sr-fadeIn .3s ease-out both; }
+  .sr .fadeOut { animation: sr-fadeOut .3s ease-in forwards; }
+  .sr .float { animation: sr-float 2.2s ease-in-out infinite alternate; }
+  .sr .sway { animation: sr-sway 1.7s ease-in-out infinite alternate; transform-origin: 50% 0; }
+  .sr .flipIn { animation: sr-flipIn .5s cubic-bezier(.2,1.3,.4,1) both; animation-delay: .35s; }
+  .sr .draw { stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: sr-draw 1.5s cubic-bezier(.5,0,.2,1) forwards; }
+  .sr .bar { transform-origin: 50% 50%; animation-name: sr-bar; animation-timing-function: cubic-bezier(.5,0,.5,1.4); animation-iteration-count: infinite; animation-direction: alternate; }
+  .sr .growY { transform-origin: 50% 0; animation: sr-growY .45s cubic-bezier(.5,0,.2,1) both; }
+  .sr .split { animation: sr-split .6s cubic-bezier(.2,1.3,.4,1) forwards; }
+  .sr .feed { animation: sr-feed 4.4s cubic-bezier(.7,0,.2,1.12) forwards; }
+  .sr .thumb { animation: sr-thumb 1.23s ease-in-out 3 both; }
+  .sr .spin { animation: sr-spin 2.4s cubic-bezier(.6,0,.3,1) infinite; }
+  .sr .chip { animation: sr-pop .4s cubic-bezier(.2,1.5,.4,1) both, sr-chipOn 2.4s linear infinite; }
+  .sr .count { counter-reset: sr-n var(--sr-n); animation: sr-count 1.6s cubic-bezier(.2,.8,.2,1) both; }
+  .sr .count::after { content: counter(sr-n); }
+  .sr .plusOne { opacity: 0; animation: sr-plusOne 1.5s cubic-bezier(.2,.8,.3,1) infinite; }
+  .sr .plusOnce { opacity: 0; animation: sr-plusOne 1s cubic-bezier(.2,.8,.3,1) both; }
+  .sr .odo { animation: sr-odo 1.8s both; }
+  .sr .wobble { animation: sr-wobble .5s ease-in-out 3; }
+  .sr .load { transform-origin: 0 50%; animation: sr-load 2.2s both; }
+  .sr .blink { animation: sr-blink .9s linear infinite; }
+  .sr .rocket { animation: sr-rocket .7s ease-in-out infinite alternate; }
+  .sr .nudge { display: inline-block; animation: sr-nudge .7s ease-in-out infinite alternate; animation-delay: 4.3s; }
+  .sr .chromeOut { animation: sr-fadeOut .35s ease-in forwards; animation-delay: 5.3s; }
+  .sr .rewind { animation: sr-rewind .5s cubic-bezier(.6,0,.9,.4) forwards; animation-delay: 5.05s; }
+
+  .sr.isPaused *, .sr.isPaused *::after { animation-play-state: paused !important; }
+  .sr.isStatic *, .sr.isStatic *::after { animation: none !important; transition: none !important; }
+
+  @keyframes sr-sceneOut { to { transform: translateX(-112%) rotate(-4deg); } }
+  @keyframes sr-folderIn { from { transform: translateX(118%) rotate(7deg); } to { transform: rotate(var(--r, 0deg)); } }
+  @keyframes sr-tabUp { from { transform: scaleY(0); opacity: 0; } 35% { opacity: 1; } to { transform: none; opacity: 1; } }
+  @keyframes sr-rise { from { transform: translateY(135%); opacity: 0; } 35% { opacity: 1; } to { transform: none; opacity: 1; } }
+  @keyframes sr-type { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+  @keyframes sr-pop { 0% { transform: scale(0) rotate(var(--r, 0deg)); } 70% { transform: scale(1.12) rotate(var(--r, 0deg)); } 100% { transform: scale(1) rotate(var(--r, 0deg)); } }
+  @keyframes sr-drop { 0% { transform: translateY(-700px) rotate(-20deg); } 58% { transform: translateY(0) rotate(-4deg) scale(1, 1); } 70% { transform: translateY(0) rotate(-4deg) scale(1.14, .84); } 84% { transform: translateY(-16px) rotate(-3deg) scale(.96, 1.05); } 100% { transform: translateY(0) rotate(-3deg); } }
+  @keyframes sr-stamp { 0% { opacity: 0; transform: scale(2.6) rotate(-14deg); } 55% { opacity: 1; transform: scale(1) rotate(var(--r, -2deg)); } 68% { opacity: 1; transform: scale(1.1, .86) rotate(var(--r, -2deg)); } 84% { opacity: 1; transform: scale(.97, 1.04) rotate(var(--r, -2deg)); } 100% { opacity: 1; transform: scale(1) rotate(var(--r, -2deg)); } }
+  @keyframes sr-toss { from { opacity: 0; transform: translate(var(--fx, 400px), var(--fy, 0px)) rotate(calc(var(--r, 0deg) + 32deg)) scale(1.15); } 75% { opacity: 1; transform: translate(0, 0) rotate(calc(var(--r, 0deg) - 2deg)) scale(.98); } to { opacity: 1; transform: rotate(var(--r, 0deg)); } }
+  @keyframes sr-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes sr-fadeOut { from { opacity: 1; } to { opacity: 0; } }
+  @keyframes sr-float { from { transform: translateY(0); } to { transform: translateY(-9px); } }
+  @keyframes sr-sway { from { transform: rotate(-2.5deg); } to { transform: rotate(2.5deg); } }
+  @keyframes sr-flipIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  @keyframes sr-swipe { 0%, 40% { transform: scaleX(0); } 100% { transform: scaleX(1); } }
+  @keyframes sr-draw { to { stroke-dashoffset: 0; } }
+  @keyframes sr-bar { from { transform: scaleY(.2); } to { transform: scaleY(1); } }
+  @keyframes sr-growY { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+  @keyframes sr-split { to { transform: translate(var(--sx), var(--sy)) rotate(var(--r)); background-color: #F2EBDD; border-color: #221F18; box-shadow: 6px 6px 0 rgba(34,31,24,.22); } }
+  @keyframes sr-feed { 0%, 18% { transform: translateY(0); } 28%, 46% { transform: translateY(-294px); } 56%, 74% { transform: translateY(-588px); } 84%, 100% { transform: translateY(-882px); } }
+  @keyframes sr-thumb { 0% { opacity: 0; transform: translateY(0); } 12% { opacity: 1; transform: translateY(0); } 45% { opacity: 1; transform: translateY(-170px); } 60%, 100% { opacity: 0; transform: translateY(-170px); } }
+  @keyframes sr-spin { to { transform: rotate(360deg); } }
+  @keyframes sr-chipOn { 0%, 22% { background-color: #221F18; color: #F2EBDD; } 26%, 100% { background-color: #F2EBDD; color: #221F18; } }
+  @keyframes sr-count { from { --sr-n: 0; } to { --sr-n: var(--to); } }
+  @keyframes sr-rewind { to { transform: scaleX(0); } }
+  @keyframes sr-nudge { from { transform: translateX(0); } to { transform: translateX(10px); } }
+  @keyframes sr-plusOne { 0% { opacity: 0; transform: translateY(0) scale(.6); } 15% { opacity: 1; transform: translateY(-10px) scale(1); } 70% { opacity: 1; } 100% { opacity: 0; transform: translateY(-110px) scale(1); } }
+  @keyframes sr-odo { 0%, 10% { transform: translateY(0); animation-timing-function: cubic-bezier(.3,1.6,.5,1); } 22%, 32% { transform: translateY(-88px); animation-timing-function: cubic-bezier(.3,1.6,.5,1); } 44%, 54% { transform: translateY(-176px); animation-timing-function: cubic-bezier(.3,1.6,.5,1); } 66%, 76% { transform: translateY(-264px); animation-timing-function: cubic-bezier(.3,1.6,.5,1); } 88%, 100% { transform: translateY(-352px); } }
+  @keyframes sr-wobble { 0%, 100% { transform: none; } 25% { transform: rotate(-10deg) translateY(-8px); } 75% { transform: rotate(7deg) translateY(-3px); } }
+  @keyframes sr-load { 0% { transform: scaleX(0); } 15% { transform: scaleX(.2); } 30% { transform: scaleX(.24); } 48% { transform: scaleX(.5); } 62% { transform: scaleX(.55); } 80% { transform: scaleX(.78); } 100% { transform: scaleX(.86); } }
+  @keyframes sr-blink { 0%, 55% { opacity: 1; } 56%, 100% { opacity: .2; } }
+  @keyframes sr-rocket { from { transform: translate(0, 0); } to { transform: translate(9px, -14px); } }
+
+  /* ===== Contrôles (hors artboard, toujours visibles) ===== */
+  .sr-ctrl { position: absolute; right: 12px; bottom: 12px; z-index: 2; display: flex; gap: 8px; }
+  .sr-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-family: var(--font-mono); font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    background: var(--paper); color: var(--ink);
+    border: 1.5px solid var(--ink); box-shadow: 3px 3px 0 rgba(0, 0, 0, .4);
+    padding: 7px 11px; cursor: pointer; line-height: 1;
+  }
+  .sr-btn--sound { background: var(--jaune); }
+  .sr-btn--sound[aria-pressed='true'] { background: var(--paper); }
+  .sr-btn[data-active] { background: var(--jaune); }
+  .sr-btn:focus-visible { outline: 2px solid var(--jaune); outline-offset: 2px; }
+  .sr-ico { font-size: 12px; }
+  @media (max-width: 860px) {
+    .sr-txt { display: none; }
+    .sr-btn { padding: 7px 9px; }
+  }
+</style>
+
+<script>
+  const STARTS = [0, 4.2, 6.6, 12.0, 17.4, 22.8, 28.2, 32.4];
+  const TOTAL = 38.4;
+  const BEAT = 0.6; // 100 BPM
+  const MUSIC_VOL = 0.55;
+  const SFX_VOL = 0.9;
+  const INK = '#221F18', PAPER = '#F2EBDD';
+  const SVC = ['#C9A877', '#C7B6E6', '#A6C6E2', '#EFD27E', '#AEC9A2'];
+  const TAG_X = [180, 180, 320, 460, 600, 740, 880, 540];
+  const TAG_BG = [PAPER, PAPER, SVC[0], SVC[1], SVC[2], SVC[3], SVC[4], PAPER];
+  const COUNTERS = ['', 'OUVERTURE', 'DOSSIER 01 / 05', 'DOSSIER 02 / 05', 'DOSSIER 03 / 05', 'DOSSIER 04 / 05', 'DOSSIER 05 / 05', '05 / 05 ✓'];
+  const ACCENTS = [PAPER, '#E8A492', SVC[0], SVC[1], SVC[2], SVC[3], SVC[4], '#E8A492'];
+  const TAG_TXT = [
+    '',
+    'commence ici.',
+    'on la <span class="em">vend.</span>',
+    'on la <span class="em">partage.</span>',
+    'on l’<span class="em">installe.</span>',
+    'on la <span class="em">structure.</span>',
+    'on la fait <span class="em">vivre.</span>',
+    '<span class="em">bien racontée.</span>',
+  ];
+
+  type Ev = [number, string, ...any[]];
+
+  class Showreel {
+    root: HTMLElement;
+    stage: HTMLElement;
+    mount: HTMLElement;
+    tpls: HTMLTemplateElement[];
+    chrome: HTMLElement;
+    accent: HTMLElement;
+    counter: HTMLElement;
+    thread: HTMLElement;
+    threadIn: HTMLElement;
+    arrow: HTMLElement;
+    nodes: HTMLElement[];
+    tag: HTMLElement;
+    tagBox: HTMLElement;
+    tagTxt: HTMLElement;
+    pauseBtn: HTMLButtonElement;
+    soundBtn: HTMLButtonElement;
+
+    scene: number | null = null;
+    paused = false;
+    offscreen = false;
+    isStatic = false;
+    t0 = performance.now();
+    last = performance.now();
+
+    ctx: AudioContext | null = null;
+    audioOn = false;
+    aStart = 0;
+    music!: GainNode;
+    sfx!: GainNode;
+    noise!: AudioBuffer;
+    events: Ev[] = [];
+    nextIdx = 0;
+    loopN = 0;
+    sched: number | undefined;
+
+    constructor(root: HTMLElement) {
+      this.root = root;
+      const q = <T extends Element>(s: string) => root.querySelector(s) as unknown as T;
+      this.stage = q('[data-sr-stage]');
+      this.mount = q('[data-sr-scenes]');
+      this.tpls = [...root.querySelectorAll<HTMLTemplateElement>('template[data-scene]')]
+        .sort((a, b) => Number(a.dataset.scene) - Number(b.dataset.scene));
+      this.chrome = q('[data-sr-chrome]');
+      this.accent = q('[data-sr-accent]');
+      this.counter = q('[data-sr-counter]');
+      this.thread = q('[data-sr-thread]');
+      this.threadIn = q('[data-sr-thread-in]');
+      this.arrow = q('[data-sr-arrow]');
+      this.nodes = [...root.querySelectorAll<HTMLElement>('[data-sr-node]')];
+      this.tag = q('[data-sr-tag]');
+      this.tagBox = q('[data-sr-tagbox]');
+      this.tagTxt = q('[data-sr-tagtxt]');
+      this.pauseBtn = q('[data-sr-pause]');
+      this.soundBtn = q('[data-sr-sound]');
+
+      // mise à l'échelle « cover » de l'artboard 1080×1080
+      const fit = () => {
+        const r = root.getBoundingClientRect();
+        const s = Math.max(r.width, r.height) / 1080;
+        this.stage.style.transform = `translate(-50%, -50%) scale(${s})`;
+        this.stage.style.visibility = 'visible';
+      };
+      new ResizeObserver(fit).observe(root);
+      fit();
+
+      // ne tourne que lorsqu'il est visible à l'écran
+      new IntersectionObserver(([e]) => { this.offscreen = !e.isIntersecting; }, { threshold: 0.05 }).observe(root);
+
+      this.pauseBtn.addEventListener('click', () => this.onPause());
+      this.soundBtn.addEventListener('click', () => this.onSound());
+
+      // mouvement réduit : image fixe de l'intro, lecture sur demande
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        this.isStatic = true;
+        root.classList.add('isStatic');
+      }
+      this.setScene(0);
+      this.syncButtons();
+      setInterval(() => this.tick(), 30);
+    }
+
+    /* ---------- horloge ---------- */
+    loopTime() {
+      if (this.audioOn && this.ctx) return this.ctx.currentTime - this.aStart;
+      return (performance.now() - this.t0) / 1000;
+    }
+
+    tick() {
+      const now = performance.now();
+      const dt = now - this.last;
+      this.last = now;
+      const holding = this.paused || this.offscreen || document.hidden || this.isStatic;
+      this.root.classList.toggle('isPaused', holding);
+      if (this.audioOn && this.ctx) {
+        if (holding && this.ctx.state === 'running') this.ctx.suspend();
+        if (!holding && this.ctx.state === 'suspended') this.ctx.resume();
+      } else if (holding) {
+        this.t0 += dt;
+        return;
+      }
+      let t = this.loopTime();
+      if (t < 0) { this.setScene(-1); return; }
+      t = t % TOTAL;
+      let i = 0;
+      for (let k = 0; k < STARTS.length; k++) if (t >= STARTS[k]) i = k;
+      this.setScene(i);
+    }
+
+    /* ---------- scènes + fil rouge ---------- */
+    setScene(i: number) {
+      if (i === this.scene) return;
+      this.scene = i;
+      this.mount.replaceChildren();
+      if (i >= 0) this.mount.appendChild(this.tpls[i].content.cloneNode(true));
+
+      const s = Math.max(i, 0);
+      this.chrome.style.opacity = s >= 1 ? '1' : '0';
+      this.chrome.classList.toggle('chromeOut', s === 7);
+      this.counter.textContent = COUNTERS[s];
+      this.accent.style.background = ACCENTS[s];
+      this.thread.classList.toggle('rewind', s === 7);
+      this.threadIn.style.transform = `scaleX(${s >= 1 ? 1 : 0})`;
+      this.arrow.style.opacity = s >= 1 ? '1' : '0';
+      this.nodes.forEach((n, k) => {
+        const done = s >= k + 2;
+        n.style.background = done ? SVC[k] : INK;
+        n.style.color = done ? INK : PAPER;
+        n.style.transform = `scale(${s === k + 2 ? 1.3 : 1})`;
+      });
+      this.tag.style.left = `${TAG_X[s] - 125}px`;
+      this.tag.style.transform = `translateY(${s >= 1 ? 0 : -40}px)`;
+      this.tagBox.style.background = TAG_BG[s];
+      this.tagTxt.innerHTML = s >= 1
+        ? `<div class="flipIn B" style="font-size: 30px; line-height: 30px">${TAG_TXT[s]}</div>`
+        : '';
+    }
+
+    /* ---------- contrôles ---------- */
+    leaveStatic() {
+      if (!this.isStatic) return;
+      this.isStatic = false;
+      this.root.classList.remove('isStatic');
+      this.t0 = performance.now();
+      this.scene = null; // force le remontage de l'intro
+    }
+
+    onPause() {
+      if (this.isStatic) { this.leaveStatic(); this.paused = false; }
+      else this.paused = !this.paused;
+      this.syncButtons();
+    }
+
+    onSound() {
+      if (this.audioOn) this.stopAudio();
+      else { this.leaveStatic(); this.paused = false; this.startAudio(); }
+      this.syncButtons();
+    }
+
+    syncButtons() {
+      const stopped = this.paused || this.isStatic;
+      const pIco = this.pauseBtn.querySelector('[data-ico]')!;
+      const pTxt = this.pauseBtn.querySelector('[data-txt]')!;
+      pIco.textContent = stopped ? '▶' : '❚❚';
+      pTxt.textContent = stopped ? 'Lecture' : 'Pause';
+      this.pauseBtn.setAttribute('aria-label', stopped ? 'Lancer l’animation' : 'Mettre l’animation en pause');
+      this.pauseBtn.toggleAttribute('data-active', stopped);
+
+      const sIco = this.soundBtn.querySelector('[data-ico]')!;
+      const sTxt = this.soundBtn.querySelector('[data-txt]')!;
+      sIco.textContent = this.audioOn ? '■' : '♪';
+      sTxt.textContent = this.audioOn ? 'Couper le son' : 'Activer le son';
+      this.soundBtn.setAttribute('aria-pressed', String(this.audioOn));
+      this.soundBtn.setAttribute('aria-label', this.audioOn ? 'Couper le son' : 'Activer le son');
+    }
+
+    /* ---------- son (synthétisé, aucun fichier) ---------- */
+    startAudio() {
+      const AC = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AC) return;
+      const ctx: AudioContext = new AC();
+      this.ctx = ctx;
+      const comp = ctx.createDynamicsCompressor();
+      comp.threshold.value = -16; comp.ratio.value = 3; comp.attack.value = 0.005; comp.release.value = 0.2;
+      comp.connect(ctx.destination);
+      this.music = ctx.createGain(); this.music.gain.value = MUSIC_VOL; this.music.connect(comp);
+      this.sfx = ctx.createGain(); this.sfx.gain.value = SFX_VOL; this.sfx.connect(comp);
+      const len = ctx.sampleRate * 2;
+      this.noise = ctx.createBuffer(1, len, ctx.sampleRate);
+      const d = this.noise.getChannelData(0);
+      for (let i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      this.events = this.buildEvents();
+      this.aStart = ctx.currentTime + 0.25;
+      this.nextIdx = 0; this.loopN = 0;
+      this.audioOn = true;
+      this.setScene(-1); // l'image repart du début, calée sur la musique
+      this.sched = window.setInterval(() => this.pump(), 40);
+      this.pump();
+    }
+
+    stopAudio() {
+      const t = Math.max(0, this.loopTime()) % TOTAL;
+      clearInterval(this.sched);
+      this.audioOn = false;
+      this.t0 = performance.now() - t * 1000;
+      try { this.ctx?.close(); } catch (e) { /* déjà fermé */ }
+      this.ctx = null;
+    }
+
+    pump() {
+      const ctx = this.ctx;
+      if (!ctx || !this.events.length) return;
+      const horizon = ctx.currentTime + 0.3;
+      for (let guard = 0; guard < 500; guard++) {
+        const ev = this.events[this.nextIdx];
+        const at = this.aStart + this.loopN * TOTAL + ev[0];
+        if (at > horizon) break;
+        if (at >= ctx.currentTime - 0.02) this.play(ev, at);
+        this.nextIdx++;
+        if (this.nextIdx >= this.events.length) { this.nextIdx = 0; this.loopN++; }
+      }
+    }
+
+    buildEvents(): Ev[] {
+      const E: Ev[] = [];
+      const b = BEAT, S = STARTS;
+      // musique : groove lo-fi 100 BPM, Fmaj7 / Em7 / Dm7 / Cmaj7
+      const chords = [[174.61, 220, 261.63, 329.63], [164.81, 196, 246.94, 293.66], [146.83, 174.61, 220, 261.63], [130.81, 164.81, 196, 246.94]];
+      const roots = [87.31, 82.41, 73.42, 65.41];
+      for (let bar = 0; bar < 16; bar++) {
+        const t = bar * 4 * b, c = bar % 4;
+        E.push([t, 'keys', chords[c], 1.9]);
+        E.push([t + 2.5 * b, 'keys', chords[c], 0.45]);
+        E.push([t, 'bass', roots[c], 0.5]);
+        E.push([t + 1.5 * b, 'bass', roots[c], 0.22]);
+        E.push([t + 2.5 * b, 'bass', roots[c], 0.4]);
+        E.push([t + 3.5 * b, 'bass', roots[c] * 1.5, 0.2]);
+        E.push([t, 'kick']); E.push([t + 2.5 * b, 'kick']);
+        if (bar % 2 === 1) E.push([t + 3.5 * b, 'kick']);
+        E.push([t + b, 'snare']); E.push([t + 3 * b, 'snare']);
+        for (let h = 0; h < 8; h++) E.push([t + (h * b) / 2 + (h % 2 ? 0.05 : 0), 'hat', h % 2 ? 0.05 : 0.08]);
+      }
+      for (let k = 1; k < S.length; k++) E.push([S[k], 'crash']);
+      // bruitages papier
+      const type = (t: number, dur: number, n: number) => { const step = dur / n; const every = step < 0.035 ? 2 : 1; for (let i = 0; i < n; i += every) E.push([t + i * step, 'tick']); };
+      const folder = (s0: number) => { E.push([s0, 'swoosh', 0.45]); E.push([s0 + 0.5, 'land']); E.push([s0 + 0.5, 'tab']); };
+      const stamp = (t: number) => E.push([t + 0.3, 'thud']);
+      const flick = (t: number) => E.push([t, 'flick']);
+      let s: number;
+      // 0 intro
+      s = S[0]; E.push([s + 0.61, 'pop']); E.push([s + 0.61, 'land']); type(s + 0.8, 0.6, 9); type(s + 1.3, 0.35, 6);
+      [1.45, 1.6, 1.75].forEach((x) => flick(s + x)); type(s + 2.5, 0.9, 36); E.push([s + 3.85, 'swoosh', 0.3]);
+      // 1 accroche
+      s = S[1]; type(s + 0.1, 0.5, 15); flick(s + 0.45); flick(s + 0.6); E.push([s + 0.4, 'pop', 0.7]); E.push([s + 2.05, 'swoosh', 0.3]);
+      // 2 ads
+      s = S[2]; folder(s); E.push([s + 0.35, 'pop', 0.8]); type(s + 1.6, 0.8, 26); [0.95, 1.1, 1.25].forEach((x) => flick(s + x + 0.4)); E.push([s + 1.5, 'pop', 1]); E.push([s + 1.8, 'rise', 1.5]); E.push([s + 3.2, 'pop', 1.3]); E.push([s + 5.05, 'swoosh', 0.3]);
+      // 3 réseaux
+      s = S[3]; folder(s); E.push([s + 0.35, 'pop', 0.85]); E.push([s + 0.7, 'pop', 1]); type(s + 1.6, 1, 40);
+      [1.79, 3.02, 4.26].forEach((x) => E.push([s + x, 'swoosh', 0.22])); E.push([s + 2.2, 'pop', 1]); for (let k = 0; k < 8; k++) E.push([s + 2.45 + k * 0.18 + 0.2, 'blip', 440 + k * 60]); E.push([s + 4.1, 'pop', 1.4]); E.push([s + 5.05, 'swoosh', 0.3]);
+      // 4 podcasts
+      s = S[4]; folder(s); E.push([s + 0.35, 'pop', 0.9]); E.push([s + 0.8, 'pop', 1]); E.push([s + 1.1, 'pop', 1]); stamp(s + 1.6); type(s + 1.6, 0.8, 28);
+      E.push([s + 1.9, 'tab']); E.push([s + 2.0, 'tab']); [0, 0.06, 0.12].forEach((x) => flick(s + 3.1 + x)); E.push([s + 5.05, 'swoosh', 0.3]);
+      // 5 stratégie
+      s = S[5]; folder(s); E.push([s + 0.35, 'pop', 0.95]); type(s + 1.5, 1, 40);
+      for (let k = 0; k < 12; k++) E.push([s + 1.05 + k * 0.07, 'blip', 520 + k * 38]);
+      [2.1, 2.2, 2.3, 2.4].forEach((x) => E.push([s + x, 'pop', 1.1])); E.push([s + 5.05, 'swoosh', 0.3]);
+      // 6 événementiel
+      s = S[6]; folder(s); E.push([s + 0.35, 'pop', 1]); [0.55, 0.7, 0.85, 1.0].forEach((x) => { flick(s + x); E.push([s + x + 0.45, 'land']); }); type(s + 1.3, 0.7, 28); stamp(s + 1.8); E.push([s + 3.85, 'swoosh', 0.3]);
+      // 7 outro
+      s = S[7]; type(s + 0.05, 0.9, 39); [0.15, 0.3, 0.45].forEach((x) => E.push([s + x + 0.48, 'land'])); E.push([s + 0.35, 'pop', 1.2]);
+      [1.3, 1.66, 2.02, 2.38].forEach((x, i) => { E.push([s + x, 'blip', 660 + i * 110]); E.push([s + x, 'tab']); });
+      [1.2, 1.7, 2.2].forEach((x) => E.push([s + x, 'pop', 0.6]));
+      [1.3, 1.63, 1.96, 2.36, 2.7, 3.1, 3.5].forEach((x) => E.push([s + x, 'tick']));
+      E.push([s + 1.2, 'rise', 0.9]); E.push([s + 2.0, 'pop', 1.5]);
+      stamp(s + 2.6);
+      type(s + 3.1, 0.8, 19); stamp(s + 3.75); E.push([s + 5.05, 'swoosh', 0.5]);
+      E.sort((a, c) => a[0] - c[0]);
+      return E;
+    }
+
+    env(g: GainNode, at: number, peak: number, a: number, dcy: number) {
+      g.gain.setValueAtTime(0.0001, at);
+      g.gain.exponentialRampToValueAtTime(peak, at + a);
+      g.gain.exponentialRampToValueAtTime(0.0001, at + a + dcy);
+    }
+
+    nz(at: number, dur: number, filterType: BiquadFilterType, freq: number, q: number, peak: number, a: number, dcy: number, bus?: GainNode) {
+      const ctx = this.ctx!;
+      const src = ctx.createBufferSource(); src.buffer = this.noise;
+      const f = ctx.createBiquadFilter(); f.type = filterType; f.frequency.value = freq; f.Q.value = q;
+      const g = ctx.createGain(); this.env(g, at, peak, a, dcy);
+      src.connect(f); f.connect(g); g.connect(bus || this.sfx);
+      src.start(at, Math.random() * 1.5, dur); src.stop(at + dur + 0.05);
+      return f;
+    }
+
+    osc(at: number, type: OscillatorType, f0: number, f1: number, peak: number, a: number, dcy: number, bus?: GainNode) {
+      const ctx = this.ctx!;
+      const o = ctx.createOscillator(); o.type = type;
+      o.frequency.setValueAtTime(f0, at);
+      if (f1) o.frequency.exponentialRampToValueAtTime(f1, at + a + dcy * 0.6);
+      const g = ctx.createGain(); this.env(g, at, peak, a, dcy);
+      o.connect(g); g.connect(bus || this.sfx);
+      o.start(at); o.stop(at + a + dcy + 0.05);
+    }
+
+    play(ev: Ev, at: number) {
+      const ctx = this.ctx!, k = ev[1];
+      if (k === 'kick') this.osc(at, 'sine', 130, 42, 0.9, 0.004, 0.32, this.music);
+      else if (k === 'snare') { this.nz(at, 0.25, 'bandpass', 1700, 0.7, 0.32, 0.003, 0.18, this.music); this.osc(at, 'triangle', 210, 150, 0.12, 0.002, 0.08, this.music); }
+      else if (k === 'hat') this.nz(at, 0.06, 'highpass', 7500, 0.7, ev[2], 0.002, 0.035, this.music);
+      else if (k === 'crash') this.nz(at, 1.4, 'highpass', 4000, 0.5, 0.1, 0.01, 1.2, this.music);
+      else if (k === 'bass') {
+        const o = ctx.createOscillator(); o.type = 'triangle'; o.frequency.value = ev[2];
+        const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 520;
+        const g = ctx.createGain(); this.env(g, at, 0.34, 0.012, ev[3]);
+        o.connect(f); f.connect(g); g.connect(this.music); o.start(at); o.stop(at + ev[3] + 0.1);
+      } else if (k === 'keys') {
+        const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1500; f.Q.value = 0.3;
+        const g = ctx.createGain(); this.env(g, at, 0.075, 0.03, ev[3]);
+        f.connect(g); g.connect(this.music);
+        (ev[2] as number[]).forEach((fr, i) => {
+          ([['sine', 0], ['triangle', 4]] as [OscillatorType, number][]).forEach(([tp, det]) => {
+            const o = ctx.createOscillator(); o.type = tp; o.frequency.value = fr; o.detune.value = det + (i % 2 ? -3 : 3);
+            o.connect(f); o.start(at + i * 0.012); o.stop(at + ev[3] + 0.15);
+          });
+        });
+      } else if (k === 'swoosh') {
+        const dur = ev[2];
+        const f = this.nz(at, dur + 0.1, 'bandpass', 500, 1.1, 0.35, dur * 0.55, dur * 0.5);
+        f.frequency.setValueAtTime(500, at); f.frequency.exponentialRampToValueAtTime(2600, at + dur);
+      } else if (k === 'land') { this.nz(at, 0.12, 'lowpass', 900, 0.7, 0.3, 0.003, 0.08); this.osc(at, 'sine', 160, 70, 0.25, 0.003, 0.09); }
+      else if (k === 'tab') this.nz(at, 0.06, 'bandpass', 3200, 2, 0.16, 0.002, 0.04);
+      else if (k === 'flick') this.nz(at, 0.1, 'bandpass', 2400, 1.6, 0.22, 0.004, 0.07);
+      else if (k === 'tick') { this.nz(at, 0.03, 'highpass', 3000, 0.8, 0.16, 0.001, 0.016); this.osc(at, 'square', 1900 + Math.random() * 300, 0, 0.025, 0.001, 0.008); }
+      else if (k === 'thud') { this.osc(at, 'sine', 115, 38, 1.0, 0.003, 0.3); this.nz(at, 0.18, 'lowpass', 500, 0.7, 0.55, 0.002, 0.13); }
+      else if (k === 'pop') { const m = ev[2] || 1; this.osc(at, 'sine', 380 * m, 820 * m, 0.32, 0.003, 0.09); }
+      else if (k === 'blip') this.osc(at, 'sine', ev[2], 0, 0.1, 0.003, 0.08);
+      else if (k === 'rise') this.osc(at, 'triangle', 330, 660, 0.06, 0.05, ev[2]);
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-sr]').forEach((el) => new Showreel(el));
+</script>
